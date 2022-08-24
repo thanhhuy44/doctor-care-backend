@@ -1,22 +1,25 @@
-const validateData = (req, res, next) => {
-  if (req.body === {} || !req.files) {
-    return res.send({
-      errCode: 1,
-      message: "Please complete all information!",
-    });
-  } else {
-    next();
-  }
+import { check } from "express-validator";
+
+const validateRegister = () => {
+  return [
+    check("username", "username does not Empty").not().isEmpty(),
+    check("username", "username must be Alphanumeric").isAlphanumeric(),
+    check("username", "username more than 6 degits").isLength({ min: 6 }),
+    check("email", "Invalid does not Empty").not().isEmpty(),
+    check("email", "Invalid email").isEmail(),
+    check("numberPhone", "Invalid Number Phone").isMobilePhone,
+    check("birthday", "Invalid birthday").isISO8601("yyyy-mm-dd"),
+    check("password", "password more than 6 degits").isLength({ min: 6 }),
+  ];
 };
 
-const checkRegexUserName = (req, res, next) => {
-  let isUserName = /^[a-zA-Z0-9]+$/.test(req.body.userName);
-  if (isUserName) {
+const checkHasImage = (req, res, next) => {
+  if (req.files) {
     next();
   } else {
-    return res.json({
+    res.json({
       errCode: 1,
-      message: "Wrong userName!",
+      message: "Image is required!",
     });
   }
 };
@@ -66,8 +69,9 @@ const checkReNewPassword = (req, res, next) => {
 };
 
 export {
-  checkRegexUserName,
+  validateRegister,
   checkRegexEmail,
   checkRegexPhoneNumber,
   checkReNewPassword,
+  checkHasImage,
 };
