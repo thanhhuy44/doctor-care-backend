@@ -7,7 +7,7 @@ const createPackage = (data, image) => {
     try {
       let fileName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("./src/assets/images", fileName),
+        path.resolve("./src/assets/images/packages", fileName),
         async (error) => {
           if (error) {
             resolve({
@@ -21,7 +21,7 @@ const createPackage = (data, image) => {
               {
                 _id: id,
                 ...data,
-                image: `${process.env.BASE_URL}/images/${fileName}`,
+                image: `${process.env.BASE_URL}/images/packages/${fileName}`,
                 alias: aliasName,
                 link: `/health-package/${aliasName}/${id}`,
               },
@@ -153,44 +153,47 @@ const updateImagePackage = (id, image) => {
   return new Promise((resolve, reject) => {
     try {
       let fileName = image.name.split(" ").join("-");
-      image.mv(path.resolve("./src/assets/images", fileName), (error) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: error.message,
-          });
-        } else {
-          HealthPackage.findByIdAndUpdate(
-            {
-              _id: mongoose.Types.ObjectId(id),
-            },
-            {
-              image: `${process.env.BASE_URL}/images/${fileName}`,
-            },
-            (error, result) => {
-              if (error) {
-                resolve({
-                  errCode: 1,
-                  message: error.message,
-                });
-              } else {
-                if (result) {
-                  resolve({
-                    errCode: 0,
-                    message: "Update image package successfully!",
-                    data: result,
-                  });
-                } else {
+      image.mv(
+        path.resolve("./src/assets/images/packages", fileName),
+        (error) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            HealthPackage.findByIdAndUpdate(
+              {
+                _id: mongoose.Types.ObjectId(id),
+              },
+              {
+                image: `${process.env.BASE_URL}/images/packages/${fileName}`,
+              },
+              (error, result) => {
+                if (error) {
                   resolve({
                     errCode: 1,
-                    message: "Package not found",
+                    message: error.message,
                   });
+                } else {
+                  if (result) {
+                    resolve({
+                      errCode: 0,
+                      message: "Update image package successfully!",
+                      data: result,
+                    });
+                  } else {
+                    resolve({
+                      errCode: 1,
+                      message: "Package not found",
+                    });
+                  }
                 }
               }
-            }
-          );
+            );
+          }
         }
-      });
+      );
     } catch (e) {
       reject(e);
     }

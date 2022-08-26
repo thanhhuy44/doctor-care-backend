@@ -7,7 +7,7 @@ const createHospital = (data, image) => {
     try {
       let fileName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("./src/assets/images", fileName),
+        path.resolve("./src/assets/images/hospitals", fileName),
         async (error) => {
           if (error) {
             resolve({
@@ -21,7 +21,7 @@ const createHospital = (data, image) => {
               {
                 _id: id,
                 ...data,
-                image: `${process.env.BASE_URL}/images/${fileName}`,
+                image: `${process.env.BASE_URL}/images/hospitals/${fileName}`,
                 alias: aliasName,
                 link: `/hospital/${aliasName}/${id}`,
               },
@@ -147,44 +147,47 @@ const updateImageHospital = (id, image) => {
   return new Promise((resolve, reject) => {
     try {
       let fileName = image.name.split(" ").join("-");
-      image.mv(path.resolve("./src/assets/images", fileName), (error) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: error.message,
-          });
-        } else {
-          Hospital.findByIdAndUpdate(
-            {
-              _id: mongoose.Types.ObjectId(id),
-            },
-            {
-              image: `${process.env.BASE_URL}/images/${fileName}`,
-            },
-            (error, result) => {
-              if (error) {
-                resolve({
-                  errCode: 1,
-                  message: error.message,
-                });
-              } else {
-                if (result) {
-                  resolve({
-                    errCode: 0,
-                    message: "Update image hospital successfully!",
-                    data: result,
-                  });
-                } else {
+      image.mv(
+        path.resolve("./src/assets/images/hospitals", fileName),
+        (error) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            Hospital.findByIdAndUpdate(
+              {
+                _id: mongoose.Types.ObjectId(id),
+              },
+              {
+                image: `${process.env.BASE_URL}/images/hospitals/${fileName}`,
+              },
+              (error, result) => {
+                if (error) {
                   resolve({
                     errCode: 1,
-                    message: "Hospital not found",
+                    message: error.message,
                   });
+                } else {
+                  if (result) {
+                    resolve({
+                      errCode: 0,
+                      message: "Update image hospital successfully!",
+                      data: result,
+                    });
+                  } else {
+                    resolve({
+                      errCode: 1,
+                      message: "Hospital not found",
+                    });
+                  }
                 }
               }
-            }
-          );
+            );
+          }
         }
-      });
+      );
     } catch (e) {
       reject(e);
     }
