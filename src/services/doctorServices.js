@@ -34,7 +34,7 @@ const createDoctor = (data, image) => {
                   _id: id,
                   firstName: data.firstName,
                   lastName: data.lastName,
-                  birth: data.birth,
+                  birth: data.birthDay,
                   email: data.email,
                   password: data.email,
                   specialty: mongoose.Types.ObjectId(data.specialty),
