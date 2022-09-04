@@ -9,7 +9,11 @@ import {
 } from "../services/hospitalServices.js";
 
 const handleCreateHospital = async (req, res) => {
-  let result = await createHospital(req.body, req.files.image);
+  let result = await createHospital(
+    req.body,
+    req.files.image,
+    req.files.descImage
+  );
   return res.status(200).json(result);
 };
 

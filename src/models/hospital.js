@@ -12,6 +12,16 @@ const HospitalSchema = new Schema({
   address: { type: String, required: true },
   procedure: { type: String, required: true },
   image: { type: String, required: true },
+  descImages: [
+    {
+      name: { type: String, required: true },
+      alias: { type: String, required: true },
+      link: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   typeMedical: { type: Number, required: true, default: 2 },
 });
 

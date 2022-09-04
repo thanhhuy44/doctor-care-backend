@@ -96,11 +96,11 @@ const webRoutes = (app) => {
   // router.use("/api/create-doctor", validateData); // Validate form
 
   //////////////
-  router.use("/api/hospital/create", checkHasImage); //kiểm tra xem có ảnh không
+  // router.use("/api/hospital/create", checkHasImage); //kiểm tra xem có ảnh không
 
   router.post("/api/hospital/create", handleCreateHospital); //Thêm 1 bệnh viện
 
-  router.get("/api/hospitals/", handleGetAllHospitals); //Xem dữ liệu tất cả bệnh viện
+  router.get("/api/hospitals", handleGetAllHospitals); //Xem dữ liệu tất cả bệnh viện
 
   router.get("/api/hospital/:id", handleGetHospitalById); //Xem 1 bệnh viện
 
