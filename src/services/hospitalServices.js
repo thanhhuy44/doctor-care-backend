@@ -2,20 +2,21 @@ import mongoose from "mongoose";
 import path from "path";
 import Hospital from "../models/hospital.js";
 
-const createHospital = (data, image, descImage) => {
+const createHospital = (data, image, descImages) => {
   return new Promise(async (resolve, reject) => {
     try {
       //Xử lý ảnh mô tả bệnh viện
-      let descImageFiles = (descImage) => {
-        let descImages = [];
-        descImage.forEach((img) => {
+      let descImageFiles = (files) => {
+        console.log(files);
+        let result = [];
+        files.forEach((img) => {
           img.mv(
             path.resolve(
               "./src/assets/images/hospitals",
               img.name.split(" ").join("-")
             )
           );
-          descImages.push({
+          result.push({
             name: img.name,
             alias: img.name.split(" ").join("-"),
             link: `${process.env.BASE_URL}/images/hospitals/${img.name
@@ -23,7 +24,7 @@ const createHospital = (data, image, descImage) => {
               .join("-")}`,
           });
         });
-        return descImages;
+        return result;
       };
 
       let fileName = image.name.split(" ").join("-");
@@ -44,7 +45,7 @@ const createHospital = (data, image, descImage) => {
                 _id: id,
                 ...data,
                 image: `${process.env.BASE_URL}/images/hospitals/${fileName}`,
-                descImages: descImageFiles(descImage),
+                descImages: descImageFiles(descImages),
                 alias: aliasName,
                 link: `/hospital/${aliasName}/${id}`,
               },
