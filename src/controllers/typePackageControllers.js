@@ -8,7 +8,7 @@ import {
 } from "../services/typePackageServices.js";
 
 const handleCreateTypePackage = async (req, res) => {
-  let result = await createTypePackage(req.body, res.files.image);
+  let result = await createTypePackage(req.body, req.files.image);
   return res.json(result);
 };
 
@@ -28,7 +28,7 @@ const handleUpdateInfoTypePackage = async (req, res) => {
 };
 
 const handleUpdateImageTypePackage = async (req, res) => {
-  let result = await updateImageTypePackage(req.params.id, req.body);
+  let result = await updateImageTypePackage(req.params.id, req.files.image);
   return res.json(result);
 };
 

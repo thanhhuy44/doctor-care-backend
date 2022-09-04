@@ -1,4 +1,5 @@
 import express from "express";
+import { validationResult } from "express-validator/src/validation-result.js";
 import {
   handleCreateDoctor,
   handleGetDoctorById,
@@ -60,9 +61,10 @@ import {
 } from "../controllers/userControllers.js";
 
 import {
+  checkHasImage,
   checkRegexEmail,
   checkRegexPhoneNumber,
-  checkRegexUserName,
+  validateRegister,
   checkReNewPassword,
 } from "../middleWares/middleWares.js";
 import {
@@ -79,7 +81,7 @@ const webRoutes = (app) => {
   router.get("/", (req, res) => {
     res.render("signup");
   });
-
+  router.use("/api/doctor/create", checkHasImage); // kiem tra du lieu co image?
   router.post("/api/doctor/create", handleCreateDoctor); //Thêm 1 bác sĩ
 
   router.get("/api/doctors", handleGetAllDoctors); //Lấy dữ liệu tất cả bác sĩ
@@ -94,6 +96,7 @@ const webRoutes = (app) => {
   // router.use("/api/create-doctor", validateData); // Validate form
 
   //////////////
+  router.use("/api/hospital/create", checkHasImage); //kiểm tra xem có ảnh không
 
   router.post("/api/hospital/create", handleCreateHospital); //Thêm 1 bệnh viện
 
@@ -103,11 +106,14 @@ const webRoutes = (app) => {
 
   router.post("/api/hospital/update-info/:id", handleUpdateInfoHospital); //Sửa info 1 bệnh viện
 
+  router.use("/api/hospital/update-image/:id", checkHasImage); //kiểm tra xem có ảnh không
+
   router.post("/api/hospital/update-image/:id", handleUpdateImageHospital); //Sửa image 1 bệnh viện
 
   router.post("/api/hospital/delete/:id", handleDeleteHospital); //Xóa 1 bệnh viện
 
   ///////////////
+  router.use("/api/specialty/create", checkHasImage);
 
   router.post("/api/specialty/create", handleCreateSpecialty); //Thêm 1 chuyên khoa
 
@@ -117,12 +123,14 @@ const webRoutes = (app) => {
 
   router.post("/api/specialty/update/info/:id", handleUpdateInfoSpecialty); //Sửa thong tin 1 chuyên khoa
 
+  router.use("api/specialty/update/image/:id", checkHasImage);
   router.post("api/specialty/update/image/:id", handleDeleteSpecialty); //Sua image 1 chuyen khoa
 
   router.post("/api/specialty/delete/:id", handleDeleteSpecialty); //Xóa 1 chuyên khoa
 
   /////////////////
 
+  router.use("/api/package/create", checkHasImage);
   router.post("/api/package/create", handleCreatePackage); //Thêm 1 gói khám
 
   router.get("/api/package/:id", handleGetDetailPackage); //Xem 1 gói khám
@@ -131,12 +139,14 @@ const webRoutes = (app) => {
 
   router.post("/api/package/update/info/:id", handleUpdateInfoPackage); //Sửa thong tin 1 gói khám
 
-  router.post("/api/package/update/image/:id", handleUpdateImagePackage); //Sửa thong tin 1 gói khám
+  router.use("/api/package/update/image/:id", checkHasImage);
+  router.post("/api/package/update/image/:id", handleUpdateImagePackage); //Sửa hinh anh 1 gói khám
 
   router.post("/api/delete-package/:id", handleDeletePackage); //Xóa 1 gói khám
 
   /////////////////
 
+  router.use("/api/type-package/create", checkHasImage);
   router.post("/api/type-package/create", handleCreateTypePackage); //Thêm 1 loại gói khám
 
   router.get("/api/type-package/:id", handleGetOneTypePackage); //Xem 1 loại gói khám
@@ -144,6 +154,8 @@ const webRoutes = (app) => {
   router.get("/api/type-packages", handleGetAllTypePackages); //Xem tất cả loại gói khám
 
   router.post("/api/type-package/update/info/:id", handleUpdateInfoTypePackage); //Sửa thong tin loại gói khám
+
+  router.use("/api/type-package/update/image/:id", checkHasImage);
   router.post(
     "/api/type-package/update/image/:id",
     handleUpdateImageTypePackage
@@ -164,7 +176,7 @@ const webRoutes = (app) => {
   router.post("/api/delete-booking/:id", handleDeleteBooking); //Xóa 1 đơn hàng
 
   ////////////////
-  router.use("/api/signup-user", checkRegexUserName);
+
   router.use("/api/signup-user", checkRegexPhoneNumber);
   router.use("/api/signup-user", checkRegexEmail);
   router.use("/api/users", handleGetAllUser);

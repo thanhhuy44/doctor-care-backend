@@ -5,6 +5,7 @@ import webRoutes from "./src/routes/webRoutes.js";
 import configViewEngine from "./src/config/viewEngine.js";
 import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
+import cors from "cors";
 
 mongoose.connect("mongodb://localhost/doctorCareDb", { useNewUrlParser: true });
 const app = express();
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.raw());
 app.use(fileUpload());
+app.use(cors());
 
 app.listen(3030, () => {
   console.log("App listening on port 3030");

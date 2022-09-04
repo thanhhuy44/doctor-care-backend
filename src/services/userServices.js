@@ -8,7 +8,7 @@ const userSignup = (data, image) => {
     try {
       let fileName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("./src/assets/images", fileName),
+        path.resolve("./src/assets/images/users", fileName),
         async (error) => {
           if (error) {
             resolve({
@@ -22,7 +22,7 @@ const userSignup = (data, image) => {
               {
                 _id: id,
                 ...data,
-                image: `${process.env.BASE_URL}/images/${fileName}`,
+                image: `${process.env.BASE_URL}/images/users/${fileName}`,
                 alias: aliasName,
                 link: `/user/${aliasName}/${id}`,
               },
@@ -128,44 +128,47 @@ const userChangeImage = (id, image) => {
   return new Promise(async (resolve, reject) => {
     try {
       let fileName = image.name.split(" ").join("-");
-      await image.mv(path.resolve("./src/assets/images", fileName), (error) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: error.message,
-          });
-        } else {
-          User.findByIdAndUpdate(
-            {
-              _id: mongoose.Types.ObjectId(id),
-            },
-            {
-              image: `${process.env.BASE_URL}/images/${fileName}`,
-            },
-            (error, result) => {
-              if (error) {
-                resolve({
-                  errCode: 1,
-                  message: error.message,
-                });
-              } else {
-                if (result) {
-                  resolve({
-                    errCode: 0,
-                    message: "Update image user successfully!",
-                    data: result,
-                  });
-                } else {
+      await image.mv(
+        path.resolve("./src/assets/images/users", fileName),
+        (error) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            User.findByIdAndUpdate(
+              {
+                _id: mongoose.Types.ObjectId(id),
+              },
+              {
+                image: `${process.env.BASE_URL}/images/users/${fileName}`,
+              },
+              (error, result) => {
+                if (error) {
                   resolve({
                     errCode: 1,
-                    message: "User not found",
+                    message: error.message,
                   });
+                } else {
+                  if (result) {
+                    resolve({
+                      errCode: 0,
+                      message: "Update image user successfully!",
+                      data: result,
+                    });
+                  } else {
+                    resolve({
+                      errCode: 1,
+                      message: "User not found",
+                    });
+                  }
                 }
               }
-            }
-          );
+            );
+          }
         }
-      });
+      );
     } catch (e) {
       reject(e);
     }

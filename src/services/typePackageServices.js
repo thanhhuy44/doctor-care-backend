@@ -8,7 +8,7 @@ const createTypePackage = (data, image) => {
     try {
       let fileName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("./src/assets/images", fileName),
+        path.resolve("./src/assets/images/typePackages", fileName),
         async (error) => {
           if (error) {
             resolve({
@@ -22,7 +22,7 @@ const createTypePackage = (data, image) => {
               {
                 _id: id,
                 ...data,
-                image: `${process.env.BASE_URL}/images/${fileName}`,
+                image: `${process.env.BASE_URL}/images/typePackages/${fileName}`,
                 alias: aliasName,
                 link: `/type-package/${aliasName}/${id}`,
               },
@@ -63,6 +63,7 @@ const getAllTypePackages = () => {
           if (result) {
             resolve({
               errCode: 0,
+              data: result,
               message: "Successful!",
             });
           } else {
@@ -169,44 +170,47 @@ const updateImageTypePackage = (id, image) => {
   return new Promise(async (resolve, reject) => {
     try {
       let fileName = image.name.split(" ").join("-");
-      await image.mv(path.resolve("./src/assets/images", fileName), (error) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: error.message,
-          });
-        } else {
-          TypePackage.findByIdAndUpdate(
-            {
-              _id: mongoose.Types.ObjectId(id),
-            },
-            {
-              image: `${process.env.BASE_URL}/images/${fileName}`,
-            },
-            (error, result) => {
-              if (error) {
-                resolve({
-                  errCode: 1,
-                  message: error.message,
-                });
-              } else {
-                if (result) {
-                  resolve({
-                    errCode: 0,
-                    message: "Update image type package successfully!",
-                    data: result,
-                  });
-                } else {
+      await image.mv(
+        path.resolve("./src/assets/images/typePackages", fileName),
+        (error) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            TypePackage.findByIdAndUpdate(
+              {
+                _id: mongoose.Types.ObjectId(id),
+              },
+              {
+                image: `${process.env.BASE_URL}/images/typePackages/${fileName}`,
+              },
+              (error, result) => {
+                if (error) {
                   resolve({
                     errCode: 1,
-                    message: "Type Package not found",
+                    message: error.message,
                   });
+                } else {
+                  if (result) {
+                    resolve({
+                      errCode: 0,
+                      message: "Update image type package successfully!",
+                      data: result,
+                    });
+                  } else {
+                    resolve({
+                      errCode: 1,
+                      message: "Type Package not found",
+                    });
+                  }
                 }
               }
-            }
-          );
+            );
+          }
         }
-      });
+      );
     } catch (e) {
       reject(e);
     }

@@ -11,7 +11,7 @@ const createSpecialty = (data, image) => {
       let aliasName = data.name.split(" ").join("-");
       let fileName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("./src/assets/images", fileName),
+        path.resolve("./src/assets/images/specialties", fileName),
         function (error) {
           if (error) {
             resolve({
@@ -26,7 +26,7 @@ const createSpecialty = (data, image) => {
                 ...data,
                 link: `/specialty/${aliasName}/${id}`,
                 alias: aliasName,
-                image: process.env.BASE_URL + "/images/" + fileName,
+                image: process.env.BASE_URL + "/images/specialties/" + fileName,
               },
               (error, result) => {
                 if (error) {
@@ -160,44 +160,47 @@ const updateImageSpecialty = (id, image) => {
   return new Promise((resolve, reject) => {
     try {
       let fileName = image.name.split(" ").join("-");
-      image.mv(path.resolve("./src/assets/images", fileName), (error) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: error.message,
-          });
-        } else {
-          Specialty.findByIdAndUpdate(
-            {
-              _id: mongoose.Types.ObjectId(id),
-            },
-            {
-              image: `${process.env.BASE_URL}/images/${fileName}`,
-            },
-            (error, result) => {
-              if (error) {
-                resolve({
-                  errCode: 1,
-                  message: error.message,
-                });
-              } else {
-                if (result) {
-                  resolve({
-                    errCode: 0,
-                    message: "Update image specialty successfully!",
-                    data: result,
-                  });
-                } else {
+      image.mv(
+        path.resolve("./src/assets/images/specialties", fileName),
+        (error) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            Specialty.findByIdAndUpdate(
+              {
+                _id: mongoose.Types.ObjectId(id),
+              },
+              {
+                image: `${process.env.BASE_URL}/images/specialties/${fileName}`,
+              },
+              (error, result) => {
+                if (error) {
                   resolve({
                     errCode: 1,
-                    message: "Specialty not found",
+                    message: error.message,
                   });
+                } else {
+                  if (result) {
+                    resolve({
+                      errCode: 0,
+                      message: "Update image specialty successfully!",
+                      data: result,
+                    });
+                  } else {
+                    resolve({
+                      errCode: 1,
+                      message: "Specialty not found",
+                    });
+                  }
                 }
               }
-            }
-          );
+            );
+          }
         }
-      });
+      );
     } catch (e) {
       reject(e);
     }
