@@ -65,6 +65,13 @@ import {
   checkRegexUserName,
   checkReNewPassword,
 } from "../middleWares/middleWares.js";
+import {
+  handleAdminchangeImage,
+  handleAdminChangeInfo,
+  handleAdminChangePassword,
+  handleAdminLogin,
+  handleCreateAdmin,
+} from "../controllers/adminControllers.js";
 
 const router = express.Router();
 
@@ -167,6 +174,14 @@ const webRoutes = (app) => {
   router.post("/api/users", handleGetAllUser);
   router.use("/api/change-password", checkReNewPassword);
   router.post("/api/change-password", handleUserChangePassword); //Đổi mật khẩu
+
+  ////////////////
+
+  router.post("/api/admin/create", handleCreateAdmin); //Thêm một admin
+  router.post("/api/admin/login", handleAdminLogin); //Đăng nhập
+  router.post("/api/admin/change-info/:id", handleAdminChangeInfo); //Thay đổi thông tin admin
+  router.post("/api/admin/change-image", handleAdminchangeImage); //Thay đổi hình ảnh admnin
+  router.post("/api/admin/change-password", handleAdminChangePassword); //Thay đổi mật khẩu admin
 
   return app.use("/", router);
 };
