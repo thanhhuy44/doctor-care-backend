@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import path from "path";
-import bcrypt from "bcrypt";
 import Doctor from "../models/doctor.js";
 
 const createDoctor = (data, image) => {

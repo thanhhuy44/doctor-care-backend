@@ -1,12 +1,4 @@
 import {
-  create,
-  getAll,
-  getOneById,
-  update,
-  remove,
-} from "../services/CRUDServices.js";
-import Specialty from "../models/specialty.js";
-import {
   getDetailSpecialty,
   createSpecialty,
   getAllSpecialties,

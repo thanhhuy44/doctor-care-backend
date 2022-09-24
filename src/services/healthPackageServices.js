@@ -27,6 +27,7 @@ const createPackage = (data, image) => {
               },
               (error, result) => {
                 if (result) {
+                  console.log("success");
                   resolve({
                     errCode: 0,
                     message: "Create Health Package successful",
@@ -52,27 +53,36 @@ const createPackage = (data, image) => {
 const getAllPackages = () => {
   return new Promise((resolve, reject) => {
     try {
-      HealthPackage.find({}, (error, result) => {
-        if (error) {
-          resolve({
-            errCode: error,
-            message: error.message,
-          });
-        } else {
-          if (result) {
-            resolve({
-              errCode: 0,
-              message: "Successful",
-              data: result,
-            });
-          } else {
+      HealthPackage.find({})
+        .populate({
+          path: "typePackage",
+          select: "_id name alias link",
+        })
+        .populate({
+          path: "hospital",
+          select: "_id name alias link address image",
+        })
+        .exec((error, result) => {
+          if (error) {
             resolve({
               errCode: 1,
-              message: "Error!",
+              message: error.message,
             });
+          } else {
+            if (result) {
+              resolve({
+                errCode: 0,
+                message: "Successful",
+                data: result,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Error!",
+              });
+            }
           }
-        }
-      });
+        });
     } catch (e) {
       reject(e);
     }
@@ -85,7 +95,14 @@ const getDetailPackages = (id) => {
       HealthPackage.findById({
         _id: mongoose.Types.ObjectId(id),
       })
-        .populate("hospital")
+        .populate({
+          path: "typePackage",
+          select: "_id name alias link",
+        })
+        .populate({
+          path: "hospital",
+          select: "_id name alias link address image",
+        })
         .exec((error, result) => {
           if (error) {
             resolve({

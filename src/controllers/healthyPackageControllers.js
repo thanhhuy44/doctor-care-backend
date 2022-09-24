@@ -7,7 +7,7 @@ import {
 } from "../services/healthPackageServices.js";
 
 const handleCreatePackage = async (req, res) => {
-  let result = createPackage(req.body, res.files.image);
+  let result = await createPackage(req.body, req.files.image);
   return res.json(result);
 };
 

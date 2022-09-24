@@ -1,4 +1,3 @@
-import Hospital from "../models/hospital.js";
 import {
   createHospital,
   getAllHospitals,
@@ -9,8 +8,6 @@ import {
 } from "../services/hospitalServices.js";
 
 const handleCreateHospital = async (req, res) => {
-  console.log(req.files);
-  let ImgArr = [];
   let result = await createHospital(
     req.body,
     req.files.image,

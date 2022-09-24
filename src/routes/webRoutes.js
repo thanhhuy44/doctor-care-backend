@@ -74,6 +74,13 @@ import {
   handleAdminLogin,
   handleCreateAdmin,
 } from "../controllers/adminControllers.js";
+import { handleGetHomePage } from "../controllers/pageControllers.js";
+import {
+  handleCreatePost,
+  handleDeletePost,
+  handleGetAllPosts,
+  handleGetDetailPost,
+} from "../controllers/postControllers.js";
 
 const router = express.Router();
 
@@ -194,6 +201,16 @@ const webRoutes = (app) => {
   router.post("/api/admin/change-info/:id", handleAdminChangeInfo); //Thay đổi thông tin admin
   router.post("/api/admin/change-image", handleAdminchangeImage); //Thay đổi hình ảnh admnin
   router.post("/api/admin/change-password", handleAdminChangePassword); //Thay đổi mật khẩu admin
+
+  ////////////////
+
+  router.post("/api/post/create", handleCreatePost);
+  router.get("/api/posts", handleGetAllPosts);
+  router.get("/api/post/:id", handleGetDetailPost);
+  router.post("/api/post/delete/:id", handleDeletePost);
+
+  ///////////////
+  router.get("/api/home", handleGetHomePage);
 
   return app.use("/", router);
 };
