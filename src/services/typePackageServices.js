@@ -83,49 +83,29 @@ const getAllTypePackages = () => {
 const getDetailTypePackage = (id) => {
   return new Promise((resolve, reject) => {
     try {
-      TypePackage.findById(
-        { _id: mongoose.Types.ObjectId(id) },
-        (error, typePackage) => {
+      TypePackage.findById({ _id: mongoose.Types.ObjectId(id) })
+        .populate("healthPackages")
+        .exec((error, result) => {
           if (error) {
             resolve({
               errCode: 1,
               message: error.message,
             });
           } else {
-            if (typePackage) {
-              HealthPackage.find(
-                { typePackage: typePackage.id },
-                (error, packages) => {
-                  if (error) {
-                    resolve({
-                      errCode: 1,
-                      message: error.message,
-                    });
-                  } else {
-                    if (packages) {
-                      resolve({
-                        errCode: 0,
-                        message: "Successfull!",
-                        data: {
-                          name: typePackage.name,
-                          description: typePackage.description,
-                          packages: packages,
-                        },
-                      });
-                    } else {
-                      resolve({
-                        errCode: 1,
-                        message: "Not found type package!",
-                      });
-                    }
-                  }
-                }
-              );
+            if (result) {
+              resolve({
+                errCode: 0,
+                message: "Successfully!",
+                data: result,
+              });
             } else {
+              resolve({
+                errCode: 1,
+                message: "Type Package not found!",
+              });
             }
           }
-        }
-      );
+        });
     } catch (e) {
       reject(e);
     }

@@ -13,7 +13,7 @@ const HealthPackageSchema = new Schema({
   price: { type: Number, required: true },
   procedure: { type: String, required: true },
   typePackage: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "TypePackage",
   },

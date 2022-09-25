@@ -8,6 +8,12 @@ const TypePackageSchema = new Schema({
   link: { type: String, required: true },
   image: { type: String, required: true },
   description: { type: String, required: true },
+  healthPackages: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "HealthPackage",
+    },
+  ],
 });
 
 const TypePackage = mongoose.model("TypePackage", TypePackageSchema);
