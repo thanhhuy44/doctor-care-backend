@@ -22,8 +22,8 @@ const UserSchema = new Schema(
   },
   {
     toJSON: {
-      transform(doc, user) {
-        delete user.password, delete user.__v;
+      transform(doc, data) {
+        delete data.password, delete data.__v;
       },
     },
   }

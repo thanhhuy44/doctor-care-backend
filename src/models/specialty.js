@@ -13,8 +13,8 @@ const SpecialtySchema = new Schema(
   },
   {
     toJSON: {
-      transform(doc, specialty) {
-        delete specialty.__v;
+      transform(doc, data) {
+        delete data.__v;
       },
     },
   }

@@ -22,8 +22,8 @@ const AdminSchema = new Schema(
   },
   {
     toJSON: {
-      transform(doc, admin) {
-        delete admin.password, delete admin.__v;
+      transform(doc, data) {
+        delete data.password, delete data.__v;
       },
     },
   }
