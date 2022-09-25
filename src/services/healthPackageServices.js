@@ -82,36 +82,27 @@ const createPackage = (data, image) => {
 const getAllPackages = () => {
   return new Promise((resolve, reject) => {
     try {
-      HealthPackage.find({})
-        .populate({
-          path: "typePackage",
-          select: "_id name alias link",
-        })
-        .populate({
-          path: "hospital",
-          select: "_id name alias link address image",
-        })
-        .exec((error, result) => {
-          if (error) {
+      HealthPackage.find({}).exec((error, result) => {
+        if (error) {
+          resolve({
+            errCode: 1,
+            message: error.message,
+          });
+        } else {
+          if (result) {
             resolve({
-              errCode: 1,
-              message: error.message,
+              errCode: 0,
+              message: "Successful",
+              data: result,
             });
           } else {
-            if (result) {
-              resolve({
-                errCode: 0,
-                message: "Successful",
-                data: result,
-              });
-            } else {
-              resolve({
-                errCode: 1,
-                message: "Error!",
-              });
-            }
+            resolve({
+              errCode: 1,
+              message: "Error!",
+            });
           }
-        });
+        }
+      });
     } catch (e) {
       reject(e);
     }
@@ -131,6 +122,9 @@ const getDetailPackages = (id) => {
         .populate({
           path: "hospital",
           select: "_id name alias link address image",
+        })
+        .populate({
+          path: "booking",
         })
         .exec((error, result) => {
           if (error) {

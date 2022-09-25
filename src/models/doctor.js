@@ -28,6 +28,12 @@ const DoctorSchema = new Schema(
       required: true,
       ref: "Hospital",
     },
+    booking: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+      },
+    ],
     image: { type: String, required: true },
     price: { type: Number, required: true },
     typeMedical: { type: Number, required: true, default: 1 },

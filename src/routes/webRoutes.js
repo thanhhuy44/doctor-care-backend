@@ -81,6 +81,7 @@ import {
   handleGetAllPosts,
   handleGetDetailPost,
 } from "../controllers/postControllers.js";
+import { handleSearch } from "../controllers/searchControllers.js";
 
 const router = express.Router();
 
@@ -172,15 +173,15 @@ const webRoutes = (app) => {
 
   ////////////////
 
-  router.post("/api/create-booking", handleCreateBooking); //Thêm 1 đơn hàng
+  router.post("/api/booking/create", handleCreateBooking); //Thêm 1 đơn hàng
 
   router.get("/api/bookings", handleGetAllBookings); //Xem tất cả đơn hàng
 
   router.get("/api/booking/:id", handleGetOneBooking); //Xem 1 đơn hàng
 
-  router.post("/api/update-booking"); //Sửa 1 đơn hàng
+  router.post("/api/booking/update/:id"); //Sửa 1 đơn hàng
 
-  router.post("/api/delete-booking/:id", handleDeleteBooking); //Xóa 1 đơn hàng
+  router.post("/api/booking/delete/:id", handleDeleteBooking); //Xóa 1 đơn hàng
 
   ////////////////
 
@@ -211,6 +212,10 @@ const webRoutes = (app) => {
 
   ///////////////
   router.get("/api/home", handleGetHomePage);
+
+  ///////////////
+
+  router.get("/api/search", handleSearch);
 
   return app.use("/", router);
 };

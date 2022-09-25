@@ -22,6 +22,12 @@ const HealthPackageSchema = new Schema(
       required: true,
       ref: "TypePackage",
     },
+    booking: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+      },
+    ],
   },
   {
     toJSON: {

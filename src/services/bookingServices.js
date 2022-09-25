@@ -1,26 +1,56 @@
 import mongoose from "mongoose";
-import path from "path";
 import Booking from "../models/booking.js";
+import Doctor from "../models/doctor.js";
+import HealthPackage from "../models/healthPackage.js";
 
 const createBooking = (data) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      Booking.create(
-        {
-          data,
-        },
-        (error, result) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            if (result) {
-              resolve({
-                errCode: 0,
-                message: "Create sucessful!",
-                data: result,
+      let id = mongoose.Types.ObjectId();
+      await Booking.create({ _id: id, ...data }, (error, result) => {
+        if (error) {
+          resolve({
+            errCode: 1,
+            message: error.message,
+          });
+        } else {
+          if (result) {
+            if (data.doctor) {
+              Doctor.findByIdAndUpdate(mongoose.Types.ObjectId(data.doctor), {
+                $push: { booking: id },
+              }).exec((error) => {
+                if (error) {
+                  resolve({
+                    errCode: 1,
+                    message: error.message,
+                  });
+                } else {
+                  resolve({
+                    errCode: 0,
+                    message: "Create successfully!",
+                    data: result,
+                  });
+                }
+              });
+            } else if (data.package) {
+              HealthPackage.findByIdAndUpdate(
+                mongoose.Types.ObjectId(data.package),
+                {
+                  $push: { booking: id },
+                }
+              ).exec((error) => {
+                if (error) {
+                  resolve({
+                    errCode: 1,
+                    message: error.message,
+                  });
+                } else {
+                  resolve({
+                    errCode: 0,
+                    message: "Create successfully!",
+                    data: result,
+                  });
+                }
               });
             } else {
               resolve({
@@ -28,9 +58,14 @@ const createBooking = (data) => {
                 message: "Error!",
               });
             }
+          } else {
+            resolve({
+              errCode: 1,
+              message: "Error!",
+            });
           }
         }
-      );
+      });
     } catch (e) {
       reject(e);
     }
@@ -40,7 +75,7 @@ const createBooking = (data) => {
 const getAllBookings = () => {
   return new Promise((resolve, reject) => {
     try {
-      Booking.find({}, (error, result) => {
+      Booking.find({}).exec((error, result) => {
         if (error) {
           resolve({
             errCode: 1,
@@ -70,11 +105,18 @@ const getAllBookings = () => {
 const getBookingsOfUser = (userId) => {
   return new Promise((resolve, reject) => {
     try {
-      Booking.find(
-        {
-          customer: mongoose.Types.ObjectId(userId),
-        },
-        (error, result) => {
+      Booking.find({
+        customer: mongoose.Types.ObjectId(userId),
+      })
+        .populate({
+          path: "doctor",
+          select: "_id firstName lastName image specialty hospital alias link",
+        })
+        .populate({
+          path: "package",
+          select: "_id name image typePackage hospital alias link",
+        })
+        .exec((error, result) => {
           if (error) {
             resolve({
               errCode: 1,
@@ -94,8 +136,7 @@ const getBookingsOfUser = (userId) => {
               });
             }
           }
-        }
-      );
+        });
     } catch (e) {
       reject(e);
     }

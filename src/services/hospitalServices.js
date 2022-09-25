@@ -75,20 +75,22 @@ const createHospital = (data, image, descImages) => {
 const getAllHospitals = () => {
   return new Promise((resolve, reject) => {
     try {
-      Hospital.find({}, (error, result) => {
-        if (result) {
-          resolve({
-            errCode: 0,
-            message: "Successful",
-            data: result,
-          });
-        } else {
-          resolve({
-            errCode: 1,
-            message: error.message,
-          });
-        }
-      });
+      Hospital.find({})
+        .select("-doctors -healthPackages")
+        .exec((error, result) => {
+          if (result) {
+            resolve({
+              errCode: 0,
+              message: "Successful",
+              data: result,
+            });
+          } else {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          }
+        });
     } catch (e) {
       reject(e);
     }
@@ -101,8 +103,14 @@ const getDetailHospital = (id) => {
       Hospital.findById({
         _id: mongoose.Types.ObjectId(id),
       })
-        .populate("doctors")
-        .populate("healthPackages")
+        .populate({
+          path: "doctors",
+          select: "_id firstName lastName image specialty hospital alias link",
+        })
+        .populate({
+          path: "healthPackages",
+          select: "_id name image typePackage hospital alias link",
+        })
         .exec((error, result) => {
           if (error) {
             resolve({

@@ -4,8 +4,6 @@ import Hospital from "../models/hospital.js";
 import Specialty from "../models/specialty.js";
 import Post from "../models/post.js";
 
-const SchemaArr = [Specialty, Doctor, Hospital, HealthPackage];
-
 const getHome = () => {
   const data = [];
   return new Promise(async (resolve, reject) => {
@@ -97,5 +95,7 @@ const getHome = () => {
     }
   });
 };
+
+const search = () => {};
 
 export { getHome };

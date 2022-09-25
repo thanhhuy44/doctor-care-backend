@@ -3,18 +3,16 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const BookingSchema = new Schema(
   {
-    _id: { type: mongoose.Types.ObjectId, required: true },
-    doctor: { type: mongoose.Types.ObjectId, ref: "Doctor" },
-    package: { type: mongoose.Types.ObjectId, ref: "HealthPackage" },
-    customer: { type: String, required: true, ref: "User" },
-    timeStart: { type: Date, required: true, default: new Date() },
-    timeEnd: {
-      type: Date,
-      required: true,
-      default: new Date(),
-    },
+    _id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+    numberPhone: { type: Number, required: true },
+    email: { type: String, required: true },
+    doctor: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor" },
+    package: { type: mongoose.Schema.Types.ObjectId, ref: "HealthPackage" },
+    time: { type: Date, required: true },
+    shift: { type: Number, required: true },
     price: { type: Number, required: true },
-    location: { type: String, required: true },
+    address: { type: String, required: true },
   },
   {
     toJSON: {

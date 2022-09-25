@@ -91,20 +91,30 @@ const createDoctor = (data, image) => {
 const getAllDoctors = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      Doctor.find({}, (error, result) => {
-        if (result) {
-          resolve({
-            errCode: 0,
-            message: "Successfully!",
-            data: result,
-          });
-        } else {
-          resolve({
-            errCode: 1,
-            message: "Error!",
-          });
-        }
-      });
+      Doctor.find({})
+        .select("-booking")
+        .populate({
+          path: "specialty",
+          select: "_id name alias link",
+        })
+        .populate({
+          path: "hospital",
+          select: "_id name alias link address image",
+        })
+        .exec((error, result) => {
+          if (result) {
+            resolve({
+              errCode: 0,
+              message: "Successfully!",
+              data: result,
+            });
+          } else {
+            resolve({
+              errCode: 1,
+              message: "Error!",
+            });
+          }
+        });
     } catch (e) {
       reject(e);
     }
@@ -122,6 +132,9 @@ const getDetailDoctor = (id) => {
         .populate({
           path: "hospital",
           select: "_id name alias link address image",
+        })
+        .populate({
+          path: "booking",
         })
         .exec((error, doctor) => {
           if (error) {
