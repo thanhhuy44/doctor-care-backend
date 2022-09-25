@@ -7,7 +7,7 @@ const DoctorSchema = new Schema(
     _id: { type: mongoose.Types.ObjectId, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    birth: { type: Date, required: true },
+    birth: { type: Date, required: true, default: Date.now },
     email: {
       type: String,
       required: true,
@@ -19,12 +19,12 @@ const DoctorSchema = new Schema(
     alias: { type: String, required: true },
     link: { type: String, required: true },
     specialty: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Specialty",
     },
     hospital: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Hospital",
     },

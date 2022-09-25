@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import path from "path";
 import HealthPackage from "../models/healthPackage.js";
+import Hospital from "../models/hospital.js";
 
 const createPackage = (data, image) => {
   return new Promise(async (resolve, reject) => {
@@ -27,11 +28,24 @@ const createPackage = (data, image) => {
               },
               (error, result) => {
                 if (result) {
-                  console.log("success");
-                  resolve({
-                    errCode: 0,
-                    message: "Create Health Package successful",
-                    data: result,
+                  Hospital.findByIdAndUpdate(
+                    mongoose.Types.ObjectId(data.hospital),
+                    {
+                      $push: { healthPackages: id },
+                    }
+                  ).exec((error) => {
+                    if (error) {
+                      resolve({
+                        errCode: 1,
+                        message: "Error!",
+                      });
+                    } else {
+                      resolve({
+                        errCode: 0,
+                        message: "Create successfully!",
+                        data: result,
+                      });
+                    }
                   });
                 } else {
                   resolve({

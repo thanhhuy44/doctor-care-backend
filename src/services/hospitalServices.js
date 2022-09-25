@@ -7,7 +7,6 @@ const createHospital = (data, image, descImages) => {
     try {
       //Xử lý ảnh mô tả bệnh viện
       let descImageFiles = (files) => {
-        console.log(files);
         let result = [];
         files.forEach((img) => {
           img.mv(
@@ -99,11 +98,12 @@ const getAllHospitals = () => {
 const getDetailHospital = (id) => {
   return new Promise((resolve, reject) => {
     try {
-      Hospital.findById(
-        {
-          _id: mongoose.Types.ObjectId(id),
-        },
-        (error, result) => {
+      Hospital.findById({
+        _id: mongoose.Types.ObjectId(id),
+      })
+        .populate("doctors")
+        .populate("healthPackages")
+        .exec((error, result) => {
           if (error) {
             resolve({
               errCode: 1,
@@ -123,8 +123,7 @@ const getDetailHospital = (id) => {
               });
             }
           }
-        }
-      );
+        });
     } catch (e) {
       reject(e);
     }

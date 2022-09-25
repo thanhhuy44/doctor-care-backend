@@ -22,6 +22,18 @@ const HospitalSchema = new Schema({
       },
     },
   ],
+  doctors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Doctor",
+    },
+  ],
+  healthPackages: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "HealthPackage",
+    },
+  ],
   typeMedical: { type: Number, required: true, default: 2 },
 });
 

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import path from "path";
 import Doctor from "../models/doctor.js";
+import Hospital from "../models/hospital.js";
 
 const createDoctor = (data, image) => {
   return new Promise(async (resolve, reject) => {
@@ -48,10 +49,25 @@ const createDoctor = (data, image) => {
                 },
                 (error, result) => {
                   if (result) {
-                    resolve({
-                      errCode: 0,
-                      message: "Create successfully!",
-                      data: result,
+                    Hospital.findByIdAndUpdate(
+                      mongoose.Types.ObjectId(data.hospital),
+                      {
+                        $push: { doctors: id },
+                      },
+                      {}
+                    ).exec((error) => {
+                      if (error) {
+                        resolve({
+                          errCode: 1,
+                          message: "Error!",
+                        });
+                      } else {
+                        resolve({
+                          errCode: 0,
+                          message: "Create successfully!",
+                          data: result,
+                        });
+                      }
                     });
                   } else {
                     console.log(error);
