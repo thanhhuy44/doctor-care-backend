@@ -7,12 +7,12 @@ const BookingSchema = new Schema(
     name: { type: String, required: true },
     numberPhone: { type: Number, required: true },
     email: { type: String, required: true },
+    address: { type: String, required: true },
     doctor: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor" },
     package: { type: mongoose.Schema.Types.ObjectId, ref: "HealthPackage" },
     time: { type: Date, required: true },
     shift: { type: Number, required: true },
-    price: { type: Number, required: true },
-    address: { type: String, required: true },
+    reason: { type: String, required: true },
   },
   {
     toJSON: {

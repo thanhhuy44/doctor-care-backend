@@ -87,7 +87,7 @@ const router = express.Router();
 
 const webRoutes = (app) => {
   router.get("/", (req, res) => {
-    res.render("signup");
+    res.render("home");
   });
   router.use("/api/doctor/create", checkHasImage); // kiem tra du lieu co image?
   router.post("/api/doctor/create", handleCreateDoctor); //Thêm 1 bác sĩ
@@ -216,6 +216,10 @@ const webRoutes = (app) => {
   ///////////////
 
   router.get("/api/search", handleSearch);
+
+  router.get("*", (req, res) => {
+    res.render("errorPage");
+  });
 
   return app.use("/", router);
 };
