@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import path from "path";
 import Doctor from "../models/doctor.js";
 import Hospital from "../models/hospital.js";
+import Specialty from "../models/specialty.js";
 
 const createDoctor = (data, image) => {
   return new Promise(async (resolve, reject) => {
@@ -69,8 +70,27 @@ const createDoctor = (data, image) => {
                         });
                       }
                     });
+                    Specialty.findByIdAndUpdate(
+                      mongoose.Types.ObjectId(data.specialty),
+                      {
+                        $push: { doctors: id },
+                      },
+                      {}
+                    ).exec((error) => {
+                      if (error) {
+                        resolve({
+                          errCode: 1,
+                          message: "Error!",
+                        });
+                      } else {
+                        resolve({
+                          errCode: 0,
+                          message: "Create successfully!",
+                          data: result,
+                        });
+                      }
+                    });
                   } else {
-                    console.log(error);
                     resolve({
                       errCode: 1,
                       message: "Error!",
@@ -163,6 +183,114 @@ const getDetailDoctor = (id) => {
   });
 };
 
+const searchDoctor = (keyword) => {
+  return new Promise((resolve, reject) => {
+    try {
+      Doctor.find(
+        {
+          lastname: { $regex: ".*" + keyword + ".*" },
+        },
+        (error, data) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            if (data) {
+              resolve({
+                errCode: 0,
+                message: "Search successfully!",
+                data: data,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Search not found!",
+              });
+            }
+          }
+        }
+      );
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const findDoctorWithFilter = (filter) => {
+  return new Promise((resolve, reject) => {
+    try {
+      filter.hospital &&
+        !filter.specialty &&
+        Doctor.find(
+          {
+            hospital: mongoose.Types.ObjectId(filter.hospital),
+          },
+          (error, data) => {
+            if (data) {
+              resolve({
+                errCode: 0,
+                message: "Get successfully!",
+                data: data,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            }
+          }
+        );
+      !filter.hospital &&
+        filter.specialty &&
+        Doctor.find(
+          {
+            specialty: mongoose.Types.ObjectId(filter.specialty),
+          },
+          (error, data) => {
+            if (data) {
+              resolve({
+                errCode: 0,
+                message: "Get successfully!",
+                data: data,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            }
+          }
+        );
+      filter.hospital &&
+        filter.specialty &&
+        Doctor.find(
+          {
+            hospital: mongoose.Types.ObjectId(filter.hospital),
+            specialty: mongoose.Types.ObjectId(filter.specialty),
+          },
+          (error, data) => {
+            if (data) {
+              resolve({
+                errCode: 0,
+                message: "Get successfully!",
+                data: data,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            }
+          }
+        );
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 const updateInfoDoctor = (id, data) => {
   return new Promise((resolve, reject) => {
     try {
@@ -174,7 +302,7 @@ const updateInfoDoctor = (id, data) => {
         (error, result) => {
           if (result) {
             resolve({
-              errCode: 1,
+              errCode: 0,
               message: "Update Successfully!",
               data: result,
             });
@@ -284,4 +412,6 @@ export {
   updateInfoDoctor,
   updateImageDoctor,
   deleteDoctor,
+  searchDoctor,
+  findDoctorWithFilter,
 };

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Doctor from "./doctor.js";
 
 const Schema = mongoose.Schema;
 const SpecialtySchema = new Schema(
@@ -10,6 +9,12 @@ const SpecialtySchema = new Schema(
     link: { type: String, required: true },
     description: { type: String, required: true },
     image: { type: String, required: true },
+    doctors: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Doctor",
+      },
+    ],
   },
   {
     toJSON: {

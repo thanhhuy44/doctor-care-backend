@@ -55,20 +55,22 @@ const createSpecialty = (data, image) => {
 const getAllSpecialties = () => {
   return new Promise((resolve, reject) => {
     try {
-      Specialty.find({}, (error, result) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: "Error!",
-          });
-        } else {
-          resolve({
-            errCode: 0,
-            message: "Successfull!",
-            data: result,
-          });
-        }
-      });
+      Specialty.find({})
+        .populate("doctors")
+        .exec((error, result) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: "Error!",
+            });
+          } else {
+            resolve({
+              errCode: 0,
+              message: "Successfull!",
+              data: result,
+            });
+          }
+        });
     } catch (e) {
       reject(e);
     }

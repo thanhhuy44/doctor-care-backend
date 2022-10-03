@@ -1,5 +1,4 @@
 import express from "express";
-import { validationResult } from "express-validator/src/validation-result.js";
 import {
   handleCreateDoctor,
   handleGetDoctorById,
@@ -7,6 +6,7 @@ import {
   handleDeleteDoctor,
   handleGetAllDoctors,
   handleUpdateImageDoctor,
+  handleSearchDoctor,
 } from "../controllers/doctorControllers.js";
 import {
   handleCreatePackage,
@@ -93,6 +93,8 @@ const webRoutes = (app) => {
   router.post("/api/doctor/create", handleCreateDoctor); //Thêm 1 bác sĩ
 
   router.get("/api/doctors", handleGetAllDoctors); //Lấy dữ liệu tất cả bác sĩ
+
+  router.get("/api/doctor/search", handleSearchDoctor); //Lấy dữ liệu tất cả bác sĩ
 
   router.get("/api/doctor/:id", handleGetDoctorById); //Lấy dữ liệu 1 bác sĩ
 
