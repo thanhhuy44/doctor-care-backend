@@ -184,11 +184,12 @@ const getDetailDoctor = (id) => {
 };
 
 const searchDoctor = (keyword) => {
+  console.log(keyword);
   return new Promise((resolve, reject) => {
     try {
       Doctor.find(
         {
-          lastname: { $regex: ".*" + keyword + ".*" },
+          lastname: new RegExp("^" + keyword + "$", "i"),
         },
         (error, data) => {
           if (error) {
