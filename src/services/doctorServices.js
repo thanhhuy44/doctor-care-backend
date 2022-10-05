@@ -184,13 +184,10 @@ const getDetailDoctor = (id) => {
 };
 
 const searchDoctor = (keyword) => {
-  console.log(keyword);
   return new Promise((resolve, reject) => {
     try {
       Doctor.find(
-        {
-          lastname: new RegExp("^" + keyword + "$", "i"),
-        },
+        { lastName: { $regex: keyword, $options: "i" } },
         (error, data) => {
           if (error) {
             resolve({
@@ -321,51 +318,81 @@ const updateInfoDoctor = (id, data) => {
   });
 };
 
-const updateImageDoctor = (id, image) => {
+const updateDoctor = (id, image, info) => {
   return new Promise((resolve, reject) => {
     try {
-      let fileName = image.name.split(" ").join("-");
-      image.mv(
-        path.resolve("./src/assets/images/doctors", fileName),
-        (error) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            Doctor.findByIdAndUpdate(
-              {
-                _id: mongoose.Types.ObjectId(id),
-              },
-              {
-                image: `${process.env.BASE_URL}/images/doctors/${fileName}`,
-              },
-              (error, result) => {
-                if (error) {
-                  resolve({
-                    errCode: 1,
-                    message: error.message,
-                  });
-                } else {
-                  if (result) {
-                    resolve({
-                      errCode: 0,
-                      message: "Update image doctor successfully!",
-                      data: result,
-                    });
-                  } else {
+      if (image === 0) {
+        Doctor.findByIdAndUpdate(
+          {
+            _id: mongoose.Types.ObjectId(id),
+          },
+          info,
+          (error, result) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              if (result) {
+                resolve({
+                  errCode: 0,
+                  message: "Update Successfully!",
+                  data: result,
+                });
+              } else {
+                resolve({
+                  errCode: 1,
+                  message: "Doctor not found!",
+                });
+              }
+            }
+          }
+        );
+      } else {
+        let fileName = image.name.split(" ").join("-");
+        image.mv(
+          path.resolve("./src/assets/images/doctors", fileName),
+          (error) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              Doctor.findByIdAndUpdate(
+                {
+                  _id: mongoose.Types.ObjectId(id),
+                },
+                {
+                  image: `${process.env.BASE_URL}/images/doctors/${fileName}`,
+                },
+                (error, result) => {
+                  if (error) {
                     resolve({
                       errCode: 1,
-                      message: "Doctor not found",
+                      message: error.message,
                     });
+                  } else {
+                    if (result) {
+                      resolve({
+                        errCode: 0,
+                        message: "Update image doctor successfully!",
+                        data: result,
+                      });
+                    } else {
+                      resolve({
+                        errCode: 1,
+                        message: "Doctor not found",
+                      });
+                    }
                   }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      }
     } catch (e) {
       reject(e);
     }
@@ -411,7 +438,7 @@ export {
   getDetailDoctor,
   getAllDoctors,
   updateInfoDoctor,
-  updateImageDoctor,
+  updateDoctor,
   deleteDoctor,
   searchDoctor,
   findDoctorWithFilter,

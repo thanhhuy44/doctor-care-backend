@@ -3,11 +3,10 @@ import {
   createDoctor,
   getAllDoctors,
   getDetailDoctor,
-  updateInfoDoctor,
-  updateImageDoctor,
   deleteDoctor,
   searchDoctor,
   findDoctorWithFilter,
+  updateDoctor,
 } from "../services/doctorServices.js";
 
 const handleGetAllDoctors = async (req, res) => {
@@ -42,9 +41,14 @@ const handleGetDoctorById = async (req, res) => {
   return res.json(data);
 };
 
-const handleUpdateInfoDoctor = async (req, res) => {
-  let result = await updateInfoDoctor(req.params.id, req.body);
-  return res.json(result);
+const handleUpdateDoctor = async (req, res) => {
+  if (req.files) {
+    let result = await updateDoctor(req.params.id, req.files.image, req.body);
+    return res.json(result);
+  } else {
+    let result = await updateDoctor(req.params.id, 0, req.body);
+    return res.json(result);
+  }
 };
 
 const handleUpdateImageDoctor = async (req, res) => {
@@ -61,7 +65,7 @@ export {
   handleCreateDoctor,
   handleGetAllDoctors,
   handleGetDoctorById,
-  handleUpdateInfoDoctor,
+  handleUpdateDoctor,
   handleDeleteDoctor,
   handleUpdateImageDoctor,
   handleSearchDoctor,

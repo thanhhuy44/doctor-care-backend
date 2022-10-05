@@ -2,10 +2,9 @@ import express from "express";
 import {
   handleCreateDoctor,
   handleGetDoctorById,
-  handleUpdateInfoDoctor,
+  handleUpdateDoctor,
   handleDeleteDoctor,
   handleGetAllDoctors,
-  handleUpdateImageDoctor,
   handleSearchDoctor,
 } from "../controllers/doctorControllers.js";
 import {
@@ -98,8 +97,7 @@ const webRoutes = (app) => {
 
   router.get("/api/doctor/:id", handleGetDoctorById); //Lấy dữ liệu 1 bác sĩ
 
-  router.post("/api/doctor/update-info/:id", handleUpdateInfoDoctor); //Sửa dữ liệu 1 bác sĩ
-  router.post("/api/doctor/update-image/:id", handleUpdateImageDoctor); //Sửa avatar 1 bác sĩ
+  router.post("/api/doctor/update/:id", handleUpdateDoctor); //Sửa dữ liệu 1 bác sĩ
 
   router.post("/api/doctor/delete/:id", handleDeleteDoctor); //Xóa 1 bác sĩ
 
