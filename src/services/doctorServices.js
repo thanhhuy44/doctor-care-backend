@@ -321,12 +321,15 @@ const updateInfoDoctor = (id, data) => {
 const updateDoctor = (id, image, info) => {
   return new Promise((resolve, reject) => {
     try {
+      let aliasName = `${info.firstName.split(" ").join("-")}-${info.lastName
+        .split(" ")
+        .join("-")}`;
       if (image === 0) {
         Doctor.findByIdAndUpdate(
           {
             _id: mongoose.Types.ObjectId(id),
           },
-          info,
+          { alias: aliasName, link: `/doctor/${aliasName}/${id}`, ...info },
           (error, result) => {
             if (error) {
               resolve({
@@ -366,6 +369,9 @@ const updateDoctor = (id, image, info) => {
                 },
                 {
                   image: `${process.env.BASE_URL}/images/doctors/${fileName}`,
+                  alias: aliasName,
+                  link: `/doctor/${aliasName}/${id}`,
+                  ...info,
                 },
                 (error, result) => {
                   if (error) {
@@ -377,7 +383,7 @@ const updateDoctor = (id, image, info) => {
                     if (result) {
                       resolve({
                         errCode: 0,
-                        message: "Update image doctor successfully!",
+                        message: "Update doctor successfully!",
                         data: result,
                       });
                     } else {
