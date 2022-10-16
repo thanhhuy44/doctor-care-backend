@@ -5,8 +5,7 @@ const Schema = mongoose.Schema;
 const DoctorSchema = new Schema(
   {
     _id: { type: mongoose.Types.ObjectId, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    name: { type: String, required: true },
     birth: { type: Date, required: true, default: Date.now },
     email: {
       type: String,
@@ -15,7 +14,7 @@ const DoctorSchema = new Schema(
       dropDups: true,
     },
     password: { type: String, required: true, select: false },
-    phoneNumber: { type: Number, required: true },
+    phoneNumber: { type: String, required: true },
     alias: { type: String, required: true },
     link: { type: String, required: true },
     specialty: {

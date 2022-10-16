@@ -27,14 +27,11 @@ const createDoctor = (data, image) => {
               });
             } else {
               let id = mongoose.Types.ObjectId();
-              let aliasName = `${data.firstName
-                .split(" ")
-                .join("-")}-${data.lastName.split(" ").join("-")}`;
+              let aliasName = `${data.name.split(" ").join("-")}`;
               await Doctor.create(
                 {
                   _id: id,
-                  firstName: data.firstName,
-                  lastName: data.lastName,
+                  name: data.name,
                   birth: data.birthDay,
                   email: data.email,
                   password: data.email,
@@ -187,7 +184,7 @@ const searchDoctor = (keyword) => {
   return new Promise((resolve, reject) => {
     try {
       Doctor.find(
-        { lastName: { $regex: keyword, $options: "i" } },
+        { name: { $regex: keyword, $options: "i" } },
         (error, data) => {
           if (error) {
             resolve({
@@ -321,9 +318,7 @@ const updateInfoDoctor = (id, data) => {
 const updateDoctor = (id, image, info) => {
   return new Promise((resolve, reject) => {
     try {
-      let aliasName = `${info.firstName.split(" ").join("-")}-${info.lastName
-        .split(" ")
-        .join("-")}`;
+      let aliasName = `${info.name.split(" ").join("-")}`;
       if (image === 0) {
         Doctor.findByIdAndUpdate(
           {

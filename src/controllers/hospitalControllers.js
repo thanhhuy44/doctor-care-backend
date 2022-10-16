@@ -1,3 +1,4 @@
+import { response } from "express";
 import {
   createHospital,
   getAllHospitals,

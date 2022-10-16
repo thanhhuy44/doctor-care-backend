@@ -6,6 +6,7 @@ const createHospital = (data, image, descImages) => {
   return new Promise(async (resolve, reject) => {
     try {
       //Xử lý ảnh mô tả bệnh viện
+      console.log(image);
       let descImageFiles = (files) => {
         let result = [];
         files.forEach((img) => {
@@ -43,6 +44,11 @@ const createHospital = (data, image, descImages) => {
               {
                 _id: id,
                 ...data,
+                address: {
+                  province: data.address[0],
+                  district: data.address[1],
+                  wards: data.address[2],
+                },
                 image: `${process.env.BASE_URL}/images/hospitals/${fileName}`,
                 descImages: descImageFiles(descImages),
                 alias: aliasName,

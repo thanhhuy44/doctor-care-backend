@@ -10,7 +10,20 @@ const HospitalSchema = new Schema(
     description: { type: String, required: true },
     strengths: { type: String, required: true },
     equipments: { type: String, required: true },
-    address: { type: String, required: true },
+    address: {
+      province: {
+        type: String,
+        required: true,
+      },
+      district: {
+        type: String,
+        required: true,
+      },
+      wards: {
+        type: String,
+        required: true,
+      },
+    },
     procedure: { type: String, required: true },
     image: { type: String, required: true },
     descImages: [
