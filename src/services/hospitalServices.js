@@ -2,70 +2,60 @@ import mongoose from "mongoose";
 import path from "path";
 import Hospital from "../models/hospital.js";
 
-const createHospital = (data, image, descImages) => {
+const createHospital = (data, logo, image) => {
   return new Promise(async (resolve, reject) => {
     try {
-      //Xử lý ảnh mô tả bệnh viện
-      console.log(image);
-      let descImageFiles = (files) => {
-        let result = [];
-        files.forEach((img) => {
-          img.mv(
-            path.resolve(
-              "./src/assets/images/hospitals",
-              img.name.split(" ").join("-")
-            )
-          );
-          result.push({
-            name: img.name,
-            alias: img.name.split(" ").join("-"),
-            link: `${process.env.BASE_URL}/images/hospitals/${img.name
-              .split(" ")
-              .join("-")}`,
-          });
-        });
-        return result;
-      };
-
-      let fileName = image.name.split(" ").join("-");
-
+      let logoName = logo.name.split(" ").join("-");
+      let imageName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("./src/assets/images/hospitals", fileName),
+        path.resolve("./src/assets/images/hospitals", imageName),
         async (error) => {
           if (error) {
             resolve({
               errCode: 1,
-              message: "Error",
+              message: error.message,
             });
           } else {
-            let id = mongoose.Types.ObjectId();
-            let aliasName = data.name.split(" ").join("-");
-            await Hospital.create(
-              {
-                _id: id,
-                ...data,
-                address: {
-                  province: data.address[0],
-                  district: data.address[1],
-                  wards: data.address[2],
-                },
-                image: `${process.env.BASE_URL}/images/hospitals/${fileName}`,
-                descImages: descImageFiles(descImages),
-                alias: aliasName,
-                link: `/hospital/${aliasName}/${id}`,
-              },
-              (error, result) => {
-                if (result) {
-                  resolve({
-                    errCode: 0,
-                    message: "Create hospital successful",
-                    data: result,
-                  });
-                } else {
+            await logo.mv(
+              path.resolve("./src/assets/images/hospitals", logoName),
+              async (error) => {
+                if (error) {
                   resolve({
                     errCode: 1,
                     message: error.message,
                   });
+                } else {
+                  let id = mongoose.Types.ObjectId();
+                  let aliasName = data.name.split(" ").join("-");
+                  await Hospital.create(
+                    {
+                      _id: id,
+                      ...data,
+                      location: {
+                        province: data.location[0],
+                        district: data.location[1],
+                        wards: data.location[2],
+                      },
+                      logo: `${process.env.BASE_URL}/images/hospitals/${logoName}`,
+                      image: `${process.env.BASE_URL}/images/hospitals/${imageName}`,
+                      alias: aliasName,
+                      link: `/hospital/${aliasName}/${id}`,
+                    },
+                    (error, result) => {
+                      if (result) {
+                        resolve({
+                          errCode: 0,
+                          message: "Thêm cơ sở y tế thành công!",
+                          data: result,
+                        });
+                      } else {
+                        resolve({
+                          errCode: 1,
+                          message: error.message,
+                        });
+                      }
+                    }
+                  );
                 }
               }
             );
@@ -87,7 +77,7 @@ const getAllHospitals = () => {
           if (result) {
             resolve({
               errCode: 0,
-              message: "Successful",
+              message: "Thành công !",
               data: result,
             });
           } else {
@@ -127,13 +117,13 @@ const getDetailHospital = (id) => {
             if (result) {
               resolve({
                 errCode: 0,
-                message: "Successful!",
+                message: "Thành công !",
                 data: result,
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Hospital not found!",
+                message: "Không tìm thấy cơ sở y tế !",
               });
             }
           }
@@ -144,87 +134,207 @@ const getDetailHospital = (id) => {
   });
 };
 
-const updateInfoHospital = (id, data) => {
-  return new Promise((resolve, reject) => {
+const updateHospital = (id, logo, image, data) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      Hospital.findByIdAndUpdate(
-        {
-          _id: mongoose.Types.ObjectId(id),
-        },
-        data,
-        (error, result) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            if (result) {
-              resolve({
-                errCode: 0,
-                message: "Upadate successfully!",
-                data: result,
-              });
-            } else {
+      if (logo !== 0 && image === 0) {
+        let logoName = logo.name.split(" ").join("-");
+        logo.mv(
+          path.resolve("./src/assets/images/hospitals", logoName),
+          (error) => {
+            if (error) {
               resolve({
                 errCode: 1,
-                message: "Hospital not found!",
+                message: error.message,
               });
-            }
-          }
-        }
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-const updateImageHospital = (id, image) => {
-  return new Promise((resolve, reject) => {
-    try {
-      let fileName = image.name.split(" ").join("-");
-      image.mv(
-        path.resolve("./src/assets/images/hospitals", fileName),
-        (error) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            Hospital.findByIdAndUpdate(
-              {
-                _id: mongoose.Types.ObjectId(id),
-              },
-              {
-                image: `${process.env.BASE_URL}/images/hospitals/${fileName}`,
-              },
-              (error, result) => {
-                if (error) {
-                  resolve({
-                    errCode: 1,
-                    message: error.message,
-                  });
-                } else {
-                  if (result) {
-                    resolve({
-                      errCode: 0,
-                      message: "Update image hospital successfully!",
-                      data: result,
-                    });
-                  } else {
+            } else {
+              Hospital.findByIdAndUpdate(
+                {
+                  _id: mongoose.Types.ObjectId(id),
+                },
+                {
+                  logo: `${process.env.BASE_URL}/images/hospitals/${logoName}`,
+                  ...data,
+                  location: {
+                    province: data.location[0],
+                    district: data.location[1],
+                    wards: data.location[2],
+                  },
+                },
+                (error, result) => {
+                  if (error) {
                     resolve({
                       errCode: 1,
-                      message: "Hospital not found",
+                      message: error.message,
                     });
+                  } else {
+                    if (result) {
+                      resolve({
+                        errCode: 0,
+                        message: "Cập nhật thông tin cơ sở y tế thành công!",
+                        data: result,
+                      });
+                    } else {
+                      resolve({
+                        errCode: 1,
+                        message: "Không tìm thấy cơ sở y tế!",
+                      });
+                    }
                   }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      } else if (image !== 0 && logo === 0) {
+        let imageName = image.name.split(" ").join("-");
+        image.mv(
+          path.resolve("./src/assets/images/hospitals", imageName),
+          (error) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              Hospital.findByIdAndUpdate(
+                {
+                  _id: mongoose.Types.ObjectId(id),
+                },
+                {
+                  image: `${process.env.BASE_URL}/images/hospitals/${imageName}`,
+                  ...data,
+                  location: {
+                    province: data.location[0],
+                    district: data.location[1],
+                    wards: data.location[2],
+                  },
+                },
+                (error, result) => {
+                  if (error) {
+                    resolve({
+                      errCode: 1,
+                      message: error.message,
+                    });
+                  } else {
+                    if (result) {
+                      resolve({
+                        errCode: 0,
+                        message: "Cập nhật thông tin cơ sở y tế thành công!",
+                        data: result,
+                      });
+                    } else {
+                      resolve({
+                        errCode: 1,
+                        message: "Không tìm thấy cơ sở y tế!",
+                      });
+                    }
+                  }
+                }
+              );
+            }
+          }
+        );
+      } else if (logo !== 0 && image !== 0) {
+        let logoName = logo.name.split(" ").join("-");
+        let imageName = image.name.split(" ").join("-");
+        await image.mv(
+          path.resolve("./src/assets/images/hospitals", imageName),
+          async (error) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              await logo.mv(
+                path.resolve("./src/assets/images/hospitals", logoName),
+                async (error) => {
+                  if (error) {
+                    resolve({
+                      errCode: 1,
+                      message: error.message,
+                    });
+                  } else {
+                    Hospital.findByIdAndUpdate(
+                      {
+                        _id: mongoose.Types.ObjectId(id),
+                      },
+                      {
+                        image: `${process.env.BASE_URL}/images/hospitals/${imageName}`,
+                        logo: `${process.env.BASE_URL}/images/hospitals/${logoName}`,
+                        ...data,
+                        location: {
+                          province: data.location[0],
+                          district: data.location[1],
+                          wards: data.location[2],
+                        },
+                      },
+                      (error, result) => {
+                        if (error) {
+                          resolve({
+                            errCode: 1,
+                            message: error.message,
+                          });
+                        } else {
+                          if (result) {
+                            resolve({
+                              errCode: 0,
+                              message:
+                                "Cập nhật thông tin cơ sở y tế thành công!",
+                              data: result,
+                            });
+                          } else {
+                            resolve({
+                              errCode: 1,
+                              message: "Không tìm thấy cơ sở y tế!",
+                            });
+                          }
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      } else {
+        Hospital.findByIdAndUpdate(
+          {
+            _id: mongoose.Types.ObjectId(id),
+          },
+          {
+            ...data,
+            location: {
+              province: data.location[0],
+              district: data.location[1],
+              wards: data.location[2],
+            },
+          },
+          (error, result) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              if (result) {
+                resolve({
+                  errCode: 0,
+                  message: "Cập nhật thông tin cơ sở y tế thành công!",
+                  data: result,
+                });
+              } else {
+                resolve({
+                  errCode: 1,
+                  message: "Không tìm thấy cơ sở y tế!",
+                });
+              }
+            }
+          }
+        );
+      }
     } catch (e) {
       reject(e);
     }
@@ -248,12 +358,45 @@ const deleteHospital = (id) => {
             if (result) {
               resolve({
                 errCode: 0,
-                message: "Delete Hospital successfully!",
+                message: "Xóa cơ sở y tế thành công!",
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Hospital not found!",
+                message: "Không tìm thấy cơ sở y tế!",
+              });
+            }
+          }
+        }
+      );
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const searchHospital = (keyword) => {
+  return new Promise((resolve, reject) => {
+    try {
+      Hospital.find(
+        { name: { $regex: keyword, $options: "i" } },
+        (error, data) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            if (data) {
+              resolve({
+                errCode: 0,
+                message: "Thành công!",
+                data: data,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Không có kết quả!",
               });
             }
           }
@@ -269,7 +412,7 @@ export {
   createHospital,
   getAllHospitals,
   getDetailHospital,
-  updateInfoHospital,
-  updateImageHospital,
+  updateHospital,
   deleteHospital,
+  searchHospital,
 };

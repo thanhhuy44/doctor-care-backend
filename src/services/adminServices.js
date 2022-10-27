@@ -8,7 +8,7 @@ const createAdmin = (data, image) => {
     try {
       let fileName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("./src/assets/images", fileName),
+        path.resolve("./src/assets/images/admin", fileName),
         async (error) => {
           if (error) {
             resolve({
@@ -22,7 +22,7 @@ const createAdmin = (data, image) => {
               {
                 _id: id,
                 ...data,
-                image: `${process.env.BASE_URL}/images/${fileName}`,
+                image: `${process.env.BASE_URL}/images/admin/${fileName}`,
                 alias: aliasName,
                 link: `/user/${aliasName}/${id}`,
               },
@@ -82,7 +82,7 @@ const adminLogin = (userName, password) => {
             } else {
               resolve({
                 errCode: 1,
-                message: "Admin not found1",
+                message: "Admin not found!",
               });
             }
           }

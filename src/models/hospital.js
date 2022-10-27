@@ -1,16 +1,26 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema;
 const HospitalSchema = new Schema(
   {
     _id: { type: mongoose.Types.ObjectId, required: true },
     name: { type: String, required: true },
+    email: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
+    password: {
+      type: String,
+      required: true,
+      default: "12345678x@X",
+      select: false,
+    },
     alias: { type: String, required: true },
     link: { type: String, required: true },
     description: { type: String, required: true },
-    strengths: { type: String, required: true },
-    equipments: { type: String, required: true },
-    address: {
+    strengths: { type: String },
+    equipments: { type: String },
+    address: { type: String, required: true },
+    location: {
       province: {
         type: String,
         required: true,
@@ -25,17 +35,8 @@ const HospitalSchema = new Schema(
       },
     },
     procedure: { type: String, required: true },
+    logo: { type: String, required: true },
     image: { type: String, required: true },
-    descImages: [
-      {
-        name: { type: String, required: true },
-        alias: { type: String, required: true },
-        link: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
     doctors: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -58,6 +59,14 @@ const HospitalSchema = new Schema(
     },
   }
 );
+
+HospitalSchema.pre("save", function (next) {
+  let hospital = this;
+  bcrypt.hash(hospital.password, 10, (error, hash) => {
+    hospital.password = hash;
+    next();
+  });
+});
 
 const Hospital = mongoose.model("Hospital", HospitalSchema);
 export default Hospital;

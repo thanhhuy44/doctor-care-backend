@@ -3,17 +3,13 @@ import {
   createHospital,
   getAllHospitals,
   getDetailHospital,
-  updateInfoHospital,
-  updateImageHospital,
   deleteHospital,
+  updateHospital,
+  searchHospital,
 } from "../services/hospitalServices.js";
 
 const handleCreateHospital = async (req, res) => {
-  let result = await createHospital(
-    req.body,
-    req.files.image,
-    req.files.descImages
-  );
+  let result = await createHospital(req.body, req.files.logo, req.files.image);
   return res.status(200).json(result);
 };
 
@@ -27,13 +23,13 @@ const handleGetHospitalById = async (req, res) => {
   return res.status(200).json(result);
 };
 
-const handleUpdateInfoHospital = async (req, res) => {
-  let result = await updateInfoHospital(req.params.id, req.body);
-  return res.status(200).json(result);
-};
-
-const handleUpdateImageHospital = async (req, res) => {
-  let result = await updateImageHospital(req.params.id, req.files.image);
+const handleUpdateHospital = async (req, res) => {
+  let result = await updateHospital(
+    req.params.id,
+    req.files.logo ? req.files.logo : 0,
+    req.files.image ? req.files.image : 0,
+    req.body
+  );
   return res.status(200).json(result);
 };
 
@@ -42,11 +38,16 @@ const handleDeleteHospital = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const handleSearchHospital = async (req, res) => {
+  let result = await searchHospital(req.query.keyword);
+  return res.status(200).json(result);
+};
+
 export {
   handleCreateHospital,
   handleGetAllHospitals,
   handleGetHospitalById,
-  handleUpdateInfoHospital,
-  handleUpdateImageHospital,
+  handleUpdateHospital,
   handleDeleteHospital,
+  handleSearchHospital,
 };

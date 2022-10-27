@@ -15,7 +15,7 @@ const AdminSchema = new Schema(
       dropDups: true,
     },
     password: { type: String, required: true },
-    phoneNumber: { type: Number, required: true },
+    phoneNumber: { type: String, required: true },
     alias: { type: String, required: true },
     link: { type: String, required: true },
     image: { type: String, required: true },

@@ -6,8 +6,11 @@ import configViewEngine from "./src/config/viewEngine.js";
 import fileUpload from "express-fileupload";
 import dotenv from "dotenv";
 import cors from "cors";
+import connectDB from "./src/config/connectDb.js";
+// mongoose.connect("mongodb://localhost/doctorCareDb", { useNewUrlParser: true });
 
-mongoose.connect("mongodb://localhost/doctorCareDb", { useNewUrlParser: true });
+connectDB();
+
 const app = express();
 configViewEngine(app);
 dotenv.config();

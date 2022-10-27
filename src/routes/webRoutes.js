@@ -20,9 +20,9 @@ import {
   handleCreateHospital,
   handleGetAllHospitals,
   handleGetHospitalById,
-  handleUpdateInfoHospital,
+  handleUpdateHospital,
   handleDeleteHospital,
-  handleUpdateImageHospital,
+  handleSearchHospital,
 } from "../controllers/hospitalControllers.js";
 
 import {
@@ -112,13 +112,10 @@ const webRoutes = (app) => {
 
   router.get("/api/hospital/:id", handleGetHospitalById); //Xem 1 bệnh viện
 
-  router.post("/api/hospital/update-info/:id", handleUpdateInfoHospital); //Sửa info 1 bệnh viện
-
-  router.use("/api/hospital/update-image/:id", checkHasImage); //kiểm tra xem có ảnh không
-
-  router.post("/api/hospital/update-image/:id", handleUpdateImageHospital); //Sửa image 1 bệnh viện
+  router.post("/api/hospital/update/:id", handleUpdateHospital); //Sửa 1 bệnh viện
 
   router.post("/api/hospital/delete/:id", handleDeleteHospital); //Xóa 1 bệnh viện
+  router.post("/api/hospital/search", handleSearchHospital); //Xóa 1 bệnh viện
 
   ///////////////
   router.use("/api/specialty/create", checkHasImage);

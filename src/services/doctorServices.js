@@ -14,7 +14,7 @@ const createDoctor = (data, image) => {
           if (error) {
             resolve({
               errCode: 1,
-              message: "Error",
+              message: error.message,
             });
           } else {
             let checkEmailExist = await Doctor.findOne({
@@ -23,7 +23,8 @@ const createDoctor = (data, image) => {
             if (checkEmailExist) {
               resolve({
                 errCode: 1,
-                message: "Email is already exist!",
+                message:
+                  "Email này đã có trên hệ thống, vui lòng cung cấp email khác!",
               });
             } else {
               let id = mongoose.Types.ObjectId();
@@ -57,40 +58,35 @@ const createDoctor = (data, image) => {
                       if (error) {
                         resolve({
                           errCode: 1,
-                          message: "Error!",
+                          message: error.message,
                         });
                       } else {
-                        resolve({
-                          errCode: 0,
-                          message: "Create successfully!",
-                          data: result,
-                        });
-                      }
-                    });
-                    Specialty.findByIdAndUpdate(
-                      mongoose.Types.ObjectId(data.specialty),
-                      {
-                        $push: { doctors: id },
-                      },
-                      {}
-                    ).exec((error) => {
-                      if (error) {
-                        resolve({
-                          errCode: 1,
-                          message: "Error!",
-                        });
-                      } else {
-                        resolve({
-                          errCode: 0,
-                          message: "Create successfully!",
-                          data: result,
+                        Specialty.findByIdAndUpdate(
+                          mongoose.Types.ObjectId(data.specialty),
+                          {
+                            $push: { doctors: id },
+                          },
+                          {}
+                        ).exec((error) => {
+                          if (error) {
+                            resolve({
+                              errCode: 1,
+                              message: error.message,
+                            });
+                          } else {
+                            resolve({
+                              errCode: 0,
+                              message: "Thêm bác sĩ vào hệ thống thành công!",
+                              data: result,
+                            });
+                          }
                         });
                       }
                     });
                   } else {
                     resolve({
                       errCode: 1,
-                      message: "Error!",
+                      message: error.message,
                     });
                   }
                 }
@@ -122,13 +118,13 @@ const getAllDoctors = () => {
           if (result) {
             resolve({
               errCode: 0,
-              message: "Successfully!",
+              message: "thành công!",
               data: result,
             });
           } else {
             resolve({
               errCode: 1,
-              message: "Error!",
+              message: error.message,
             });
           }
         });
@@ -163,13 +159,13 @@ const getDetailDoctor = (id) => {
             if (doctor) {
               resolve({
                 errCode: 0,
-                message: "Successful!",
+                message: "Thành công!",
                 data: doctor,
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Doctor not found",
+                message: "Không tìm thấy bác sĩ trên hệ thống!",
               });
             }
           }
@@ -195,13 +191,13 @@ const searchDoctor = (keyword) => {
             if (data) {
               resolve({
                 errCode: 0,
-                message: "Search successfully!",
+                message: "Thành công!",
                 data: data,
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Search not found!",
+                message: "Không có kết quả!",
               });
             }
           }
@@ -226,7 +222,7 @@ const findDoctorWithFilter = (filter) => {
             if (data) {
               resolve({
                 errCode: 0,
-                message: "Get successfully!",
+                message: "Thành công!",
                 data: data,
               });
             } else {
@@ -247,7 +243,7 @@ const findDoctorWithFilter = (filter) => {
             if (data) {
               resolve({
                 errCode: 0,
-                message: "Get successfully!",
+                message: "Thành công!",
                 data: data,
               });
             } else {
@@ -269,7 +265,7 @@ const findDoctorWithFilter = (filter) => {
             if (data) {
               resolve({
                 errCode: 0,
-                message: "Get successfully!",
+                message: "Thành công!",
                 data: data,
               });
             } else {
@@ -298,7 +294,7 @@ const updateInfoDoctor = (id, data) => {
           if (result) {
             resolve({
               errCode: 0,
-              message: "Update Successfully!",
+              message: "Cập nhật bác sĩ thành công!",
               data: result,
             });
           } else {
@@ -335,13 +331,13 @@ const updateDoctor = (id, image, info) => {
               if (result) {
                 resolve({
                   errCode: 0,
-                  message: "Update Successfully!",
+                  message: "Cập nhật thông tin bác sĩ thành công",
                   data: result,
                 });
               } else {
                 resolve({
                   errCode: 1,
-                  message: "Doctor not found!",
+                  message: "Không tìm thấy bác sĩ trên hệ thống!",
                 });
               }
             }
@@ -378,13 +374,13 @@ const updateDoctor = (id, image, info) => {
                     if (result) {
                       resolve({
                         errCode: 0,
-                        message: "Update doctor successfully!",
+                        message: "Cập nhật thông tin bác sĩ thành công!",
                         data: result,
                       });
                     } else {
                       resolve({
                         errCode: 1,
-                        message: "Doctor not found",
+                        message: "Không tìm thấy bác sĩ trên hệ thống!",
                       });
                     }
                   }
@@ -417,12 +413,12 @@ const deleteDoctor = (id) => {
             if (result) {
               resolve({
                 errCode: 0,
-                message: "Delete successfully!",
+                message: "Xóa bác sĩ ra khỏi hệ thống thành công!",
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Doctor not found!",
+                message: "Không tìm thấy bác sĩ trên hệ thống!",
               });
             }
           }

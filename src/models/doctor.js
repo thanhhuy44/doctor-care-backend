@@ -13,7 +13,12 @@ const DoctorSchema = new Schema(
       unique: true,
       dropDups: true,
     },
-    password: { type: String, required: true, select: false },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+      default: "12345678x@X",
+    },
     phoneNumber: { type: String, required: true },
     alias: { type: String, required: true },
     link: { type: String, required: true },
@@ -49,9 +54,9 @@ const DoctorSchema = new Schema(
 );
 
 DoctorSchema.pre("save", function (next) {
-  let user = this;
-  bcrypt.hash(user.password, 10, (error, hash) => {
-    user.password = hash;
+  let doctor = this;
+  bcrypt.hash(doctor.password, 10, (error, hash) => {
+    doctor.password = hash;
     next();
   });
 });
