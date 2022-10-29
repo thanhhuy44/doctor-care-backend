@@ -10,9 +10,10 @@ const BookingSchema = new Schema(
     address: { type: String, required: true },
     doctor: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor" },
     package: { type: mongoose.Schema.Types.ObjectId, ref: "HealthPackage" },
-    time: { type: Date, required: true },
-    shift: { type: Number, required: true },
-    reason: { type: String, required: true },
+    date: { type: Date, required: true },
+    time: { type: Number, required: true },
+    reason: { type: String },
+    status: { type: String, required: true, default: "waiting" },
   },
   {
     toJSON: {

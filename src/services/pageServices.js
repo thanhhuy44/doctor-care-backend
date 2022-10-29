@@ -9,6 +9,10 @@ const getHome = () => {
   return new Promise(async (resolve, reject) => {
     try {
       await Doctor.find({})
+        .populate({
+          path: "hospital",
+          select: "_id name alias link address",
+        })
         .limit(10)
         .exec((err, result) => {
           if (result) {

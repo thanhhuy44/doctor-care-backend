@@ -90,25 +90,30 @@ const getDetailSpecialty = (id) => {
             });
           } else {
             if (specialty) {
-              Doctor.find({ specialty: specialty._id }, (error, doctor) => {
-                if (error) {
-                  resolve({
-                    errCode: 1,
-                    message: error.message,
-                  });
-                } else {
-                  resolve({
-                    errCode: 0,
-                    message: "Successful!",
-                    data: {
-                      name: specialty.name,
-                      description: specialty.description,
-                      image: specialty.image,
-                      doctors: doctor,
-                    },
-                  });
-                }
-              });
+              Doctor.find({ specialty: specialty._id })
+                .populate({
+                  path: "hospital",
+                  select: "_id name alias link location address",
+                })
+                .exec((error, doctor) => {
+                  if (error) {
+                    resolve({
+                      errCode: 1,
+                      message: error.message,
+                    });
+                  } else {
+                    resolve({
+                      errCode: 0,
+                      message: "Successful!",
+                      data: {
+                        name: specialty.name,
+                        description: specialty.description,
+                        image: specialty.image,
+                        doctors: doctor,
+                      },
+                    });
+                  }
+                });
             } else {
               resolve({
                 errCode: 1,

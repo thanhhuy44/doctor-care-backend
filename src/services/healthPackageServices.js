@@ -82,27 +82,32 @@ const createPackage = (data, image) => {
 const getAllPackages = () => {
   return new Promise((resolve, reject) => {
     try {
-      HealthPackage.find({}).exec((error, result) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: error.message,
-          });
-        } else {
-          if (result) {
-            resolve({
-              errCode: 0,
-              message: "Successful",
-              data: result,
-            });
-          } else {
+      HealthPackage.find({})
+        .populate({
+          path: "hospital",
+          select: "_id name alias link address image",
+        })
+        .exec((error, result) => {
+          if (error) {
             resolve({
               errCode: 1,
-              message: "Error!",
+              message: error.message,
             });
+          } else {
+            if (result) {
+              resolve({
+                errCode: 0,
+                message: "Successful",
+                data: result,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Error!",
+              });
+            }
           }
-        }
-      });
+        });
     } catch (e) {
       reject(e);
     }

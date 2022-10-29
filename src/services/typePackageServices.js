@@ -84,7 +84,12 @@ const getDetailTypePackage = (id) => {
   return new Promise((resolve, reject) => {
     try {
       TypePackage.findById({ _id: mongoose.Types.ObjectId(id) })
-        .populate("healthPackages")
+        .populate({
+          path: "healthPackages",
+          populate: {
+            path: "hospital",
+          },
+        })
         .exec((error, result) => {
           if (error) {
             resolve({
