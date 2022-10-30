@@ -436,7 +436,7 @@ const doctorLogin = (email, password) => {
       Doctor.findOne({
         email: email,
       })
-        .select("password")
+        .select("name image birth phoneNumber password")
         .exec((error, doctor) => {
           if (error) {
             resolve({
