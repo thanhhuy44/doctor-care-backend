@@ -6,6 +6,7 @@ import {
   handleDeleteDoctor,
   handleGetAllDoctors,
   handleSearchDoctor,
+  handleDoctorLogin,
 } from "../controllers/doctorControllers.js";
 import {
   handleCreatePackage,
@@ -88,7 +89,6 @@ const webRoutes = (app) => {
   router.get("/", (req, res) => {
     res.render("home");
   });
-  router.use("/api/doctor/create", checkHasImage); // kiem tra du lieu co image?
   router.post("/api/doctor/create", handleCreateDoctor); //Thêm 1 bác sĩ
 
   router.get("/api/doctors", handleGetAllDoctors); //Lấy dữ liệu tất cả bác sĩ
@@ -100,6 +100,8 @@ const webRoutes = (app) => {
   router.post("/api/doctor/update/:id", handleUpdateDoctor); //Sửa dữ liệu 1 bác sĩ
 
   router.post("/api/doctor/delete/:id", handleDeleteDoctor); //Xóa 1 bác sĩ
+
+  router.post("/api/doctor/login", handleDoctorLogin);
 
   // router.use("/api/create-doctor", validateData); // Validate form
 

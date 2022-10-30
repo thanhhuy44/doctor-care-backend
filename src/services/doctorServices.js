@@ -3,6 +3,7 @@ import path from "path";
 import Doctor from "../models/doctor.js";
 import Hospital from "../models/hospital.js";
 import Specialty from "../models/specialty.js";
+import bcrypt from "bcrypt";
 
 const createDoctor = (data, image) => {
   return new Promise(async (resolve, reject) => {
@@ -35,7 +36,6 @@ const createDoctor = (data, image) => {
                   name: data.name,
                   birth: data.birthDay,
                   email: data.email,
-                  password: data.email,
                   specialty: mongoose.Types.ObjectId(data.specialty),
                   hospital: mongoose.Types.ObjectId(data.hospital),
                   alias: aliasName,
@@ -430,6 +430,49 @@ const deleteDoctor = (id) => {
   });
 };
 
+const doctorLogin = (email, password) => {
+  return new Promise((resolve, reject) => {
+    try {
+      Doctor.findOne({
+        email: email,
+      })
+        .select("password")
+        .exec((error, doctor) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            if (doctor) {
+              bcrypt.compare(password, doctor.password, (error, same) => {
+                if (same) {
+                  resolve({
+                    errCode: 0,
+                    message: "Bác sĩ đăng nhập thành công!",
+                    data: doctor,
+                  });
+                } else {
+                  resolve({
+                    errCode: 1,
+                    message: "Sai mật khẩu!",
+                  });
+                }
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Không tìm thấy bác sĩ trên hệ thống!",
+              });
+            }
+          }
+        });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export {
   createDoctor,
   getDetailDoctor,
@@ -439,4 +482,5 @@ export {
   deleteDoctor,
   searchDoctor,
   findDoctorWithFilter,
+  doctorLogin,
 };

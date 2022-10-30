@@ -7,6 +7,7 @@ import {
   searchDoctor,
   findDoctorWithFilter,
   updateDoctor,
+  doctorLogin,
 } from "../services/doctorServices.js";
 
 const handleGetAllDoctors = async (req, res) => {
@@ -61,6 +62,11 @@ const handleDeleteDoctor = async (req, res) => {
   return res.json(result);
 };
 
+const handleDoctorLogin = async (req, res) => {
+  let result = await doctorLogin(req.body.email, req.body.password);
+  return res.json(result);
+};
+
 export {
   handleCreateDoctor,
   handleGetAllDoctors,
@@ -69,4 +75,5 @@ export {
   handleDeleteDoctor,
   handleUpdateImageDoctor,
   handleSearchDoctor,
+  handleDoctorLogin,
 };
