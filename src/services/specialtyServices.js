@@ -80,54 +80,80 @@ const getAllSpecialties = () => {
 const getDetailSpecialty = (id) => {
   return new Promise((resolve, reject) => {
     try {
-      Specialty.findById(
-        { _id: mongoose.Types.ObjectId(id) },
-        (error, specialty) => {
+      Specialty.findById({ _id: mongoose.Types.ObjectId(id) })
+        .populate({
+          path: "doctors",
+          populate: {
+            path: "hospital booking",
+          },
+        })
+        .exec((error, result) => {
           if (error) {
             resolve({
               errCode: 1,
               message: error.message,
             });
           } else {
-            if (specialty) {
-              Doctor.find({ specialty: specialty._id })
-                .populate({
-                  path: "hospital",
-                  select: "_id name alias link location address",
-                })
-                .exec((error, doctor) => {
-                  if (error) {
-                    resolve({
-                      errCode: 1,
-                      message: error.message,
-                    });
-                  } else {
-                    resolve({
-                      errCode: 0,
-                      message: "Successful!",
-                      data: {
-                        name: specialty.name,
-                        description: specialty.description,
-                        image: specialty.image,
-                        doctors: doctor,
-                      },
-                    });
-                  }
-                });
+            if (result) {
+              resolve({
+                errCode: "0",
+                message: "Thành công!",
+                data: result,
+              });
             } else {
               resolve({
                 errCode: 1,
-                message: "Specialty not found",
+                message: "Không tìm thấy chuyên khoa",
               });
             }
           }
-        }
-      );
+        });
     } catch (e) {
       reject(e);
     }
   });
 };
+
+// (error, specialty) => {
+//   if (error) {
+//     resolve({
+//       errCode: 1,
+//       message: error.message,
+//     });
+//   } else {
+//     if (specialty) {
+//       Doctor.find({ specialty: specialty._id })
+//         .populate({
+//           path: "hospital",
+//           select: "_id name alias link location address",
+//         })
+//         .exec((error, doctor) => {
+//           if (error) {
+//             resolve({
+//               errCode: 1,
+//               message: error.message,
+//             });
+//           } else {
+//             resolve({
+//               errCode: 0,
+//               message: "Successful!",
+//               data: {
+//                 name: specialty.name,
+//                 description: specialty.description,
+//                 image: specialty.image,
+//                 doctors: doctor,
+//               },
+//             });
+//           }
+//         });
+//     } else {
+//       resolve({
+//         errCode: 1,
+//         message: "Specialty not found",
+//       });
+//     }
+//   }
+// }
 
 const updateInfoSpecialty = (id, data) => {
   return new Promise((resolve, reject) => {

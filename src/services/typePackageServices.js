@@ -87,7 +87,7 @@ const getDetailTypePackage = (id) => {
         .populate({
           path: "healthPackages",
           populate: {
-            path: "hospital",
+            path: "hospital booking",
           },
         })
         .exec((error, result) => {

@@ -147,7 +147,7 @@ const webRoutes = (app) => {
   router.use("/api/package/update/image/:id", checkHasImage);
   router.post("/api/package/update/image/:id", handleUpdateImagePackage); //Sửa hinh anh 1 gói khám
 
-  router.post("/api/delete-package/:id", handleDeletePackage); //Xóa 1 gói khám
+  router.post("/api/package/delete/:id", handleDeletePackage); //Xóa 1 gói khám
 
   /////////////////
 

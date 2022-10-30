@@ -28,6 +28,7 @@ const HealthPackageSchema = new Schema(
         ref: "Booking",
       },
     ],
+    typeMedical: { type: Number, required: true, default: 2 },
   },
   {
     toJSON: {
