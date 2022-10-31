@@ -3,8 +3,7 @@ import {
   deleteTypePackage,
   getAllTypePackages,
   getDetailTypePackage,
-  updateImageTypePackage,
-  updateInfoTypePackage,
+  updateTypePackage,
 } from "../services/typePackageServices.js";
 
 const handleCreateTypePackage = async (req, res) => {
@@ -22,26 +21,24 @@ const handleGetOneTypePackage = async (req, res) => {
   return res.json(result);
 };
 
-const handleUpdateInfoTypePackage = async (req, res) => {
-  let result = await updateInfoTypePackage(req.params.id, req.body);
-  return res.json(result);
-};
-
-const handleUpdateImageTypePackage = async (req, res) => {
-  let result = await updateImageTypePackage(req.params.id, req.files.image);
+const handleUpdateTypePackage = async (req, res) => {
+  let result = await updateTypePackage(
+    req.params.id,
+    req.files ? req.files.image : 0,
+    req.body
+  );
   return res.json(result);
 };
 
 const handleDeleteTypePackage = async (req, res) => {
   let result = await deleteTypePackage(req.params.id);
-  return req.json(result);
+  return res.json(result);
 };
 
 export {
   handleCreateTypePackage,
   handleGetAllTypePackages,
   handleGetOneTypePackage,
-  handleUpdateInfoTypePackage,
-  handleUpdateImageTypePackage,
+  handleUpdateTypePackage,
   handleDeleteTypePackage,
 };

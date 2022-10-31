@@ -13,8 +13,7 @@ import {
   handleDeletePackage,
   handleGetAllPackages,
   handleGetDetailPackage,
-  handleUpdateImagePackage,
-  handleUpdateInfoPackage,
+  handleUpdatePackage,
 } from "../controllers/healthyPackageControllers.js";
 
 import {
@@ -31,8 +30,7 @@ import {
   handleDeleteSpecialty,
   handleGetAllSpecialties,
   handleGetSpecialtyById,
-  handleUpdateInfoSpecialty,
-  handleUpdateImageSpecialty,
+  handleUpdateSpecialty,
 } from "../controllers/specialtyControllers.js";
 
 import {
@@ -40,8 +38,7 @@ import {
   handleGetAllTypePackages,
   handleGetOneTypePackage,
   handleDeleteTypePackage,
-  handleUpdateInfoTypePackage,
-  handleUpdateImageTypePackage,
+  handleUpdateTypePackage,
 } from "../controllers/typePackageControllers.js";
 
 import {
@@ -128,10 +125,7 @@ const webRoutes = (app) => {
 
   router.get("/api/specialties", handleGetAllSpecialties); //Xem tất cả chuyên khoa
 
-  router.post("/api/specialty/update/info/:id", handleUpdateInfoSpecialty); //Sửa thong tin 1 chuyên khoa
-
-  router.use("api/specialty/update/image/:id", checkHasImage);
-  router.post("api/specialty/update/image/:id", handleDeleteSpecialty); //Sua image 1 chuyen khoa
+  router.post("/api/specialty/update/:id", handleUpdateSpecialty); //Sửa thong tin 1 chuyên khoa
 
   router.post("/api/specialty/delete/:id", handleDeleteSpecialty); //Xóa 1 chuyên khoa
 
@@ -144,10 +138,7 @@ const webRoutes = (app) => {
 
   router.get("/api/packages", handleGetAllPackages); //Xem tất cả gói khám
 
-  router.post("/api/package/update/info/:id", handleUpdateInfoPackage); //Sửa thong tin 1 gói khám
-
-  router.use("/api/package/update/image/:id", checkHasImage);
-  router.post("/api/package/update/image/:id", handleUpdateImagePackage); //Sửa hinh anh 1 gói khám
+  router.post("/api/package/update/:id", handleUpdatePackage); //Sửa thong tin 1 gói khám
 
   router.post("/api/package/delete/:id", handleDeletePackage); //Xóa 1 gói khám
 
@@ -160,13 +151,7 @@ const webRoutes = (app) => {
 
   router.get("/api/type-packages", handleGetAllTypePackages); //Xem tất cả loại gói khám
 
-  router.post("/api/type-package/update/info/:id", handleUpdateInfoTypePackage); //Sửa thong tin loại gói khám
-
-  router.use("/api/type-package/update/image/:id", checkHasImage);
-  router.post(
-    "/api/type-package/update/image/:id",
-    handleUpdateImageTypePackage
-  ); //Sửa thong tin loại gói khám
+  router.post("/api/type-package/update/:id", handleUpdateTypePackage); //Sửa thong tin loại gói khám
 
   router.post("/api/type-package/delete/:id", handleDeleteTypePackage); //Xóa loại gói khám
 

@@ -117,85 +117,80 @@ const getDetailTypePackage = (id) => {
   });
 };
 
-const updateInfoTypePackage = (id, data) => {
-  return new Promise((resolve, reject) => {
-    try {
-      TypePackage.findByIdAndUpdate(
-        { _id: mongoose.Types.ObjectId(id) },
-        data,
-        (error, result) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            if (result) {
-              resolve({
-                errCode: 0,
-                message: "Successful!",
-                data: result,
-              });
-            } else {
-              resolve({
-                errCode: 1,
-                message: "Not found type package!",
-              });
-            }
-          }
-        }
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-const updateImageTypePackage = (id, image) => {
+const updateTypePackage = (id, image, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let fileName = image.name.split(" ").join("-");
-      await image.mv(
-        path.resolve("./src/assets/images/typePackages", fileName),
-        (error) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            TypePackage.findByIdAndUpdate(
-              {
-                _id: mongoose.Types.ObjectId(id),
-              },
-              {
-                image: `${process.env.BASE_URL}/images/typePackages/${fileName}`,
-              },
-              (error, result) => {
-                if (error) {
-                  resolve({
-                    errCode: 1,
-                    message: error.message,
-                  });
-                } else {
-                  if (result) {
-                    resolve({
-                      errCode: 0,
-                      message: "Update image type package successfully!",
-                      data: result,
-                    });
-                  } else {
+      if (image === 0) {
+        TypePackage.findByIdAndUpdate(
+          { _id: mongoose.Types.ObjectId(id) },
+          data,
+          (error, result) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              if (result) {
+                resolve({
+                  errCode: 0,
+                  message: "Cập nhật loại gói khám thành công!",
+                  data: result,
+                });
+              } else {
+                resolve({
+                  errCode: 1,
+                  message: "Không tìm thấy loại gói khám trên hệ thống!",
+                });
+              }
+            }
+          }
+        );
+      } else {
+        let fileName = image.name.split(" ").join("-");
+        await image.mv(
+          path.resolve("./src/assets/images/typePackages", fileName),
+          (error) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              TypePackage.findByIdAndUpdate(
+                {
+                  _id: mongoose.Types.ObjectId(id),
+                },
+                {
+                  ...data,
+                  image: `${process.env.BASE_URL}/images/typePackages/${fileName}`,
+                },
+                (error, result) => {
+                  if (error) {
                     resolve({
                       errCode: 1,
-                      message: "Type Package not found",
+                      message: error.message,
                     });
+                  } else {
+                    if (result) {
+                      resolve({
+                        errCode: 0,
+                        message: "Cập nhật loại gói khám thành công!",
+                        data: result,
+                      });
+                    } else {
+                      resolve({
+                        errCode: 1,
+                        message: "Không tìm thấy loại gói khám trên hệ thống!",
+                      });
+                    }
                   }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      }
     } catch (e) {
       reject(e);
     }
@@ -205,7 +200,7 @@ const updateImageTypePackage = (id, image) => {
 const deleteTypePackage = (id) => {
   return new Promise((resolve, reject) => {
     try {
-      HealthPackage.findByIdAndDelete(
+      TypePackage.findByIdAndDelete(
         {
           _id: mongoose.Types.ObjectId(id),
         },
@@ -219,12 +214,12 @@ const deleteTypePackage = (id) => {
             if (result) {
               resolve({
                 errCode: 0,
-                message: "Delete successfully!",
+                message: "Xóa loại gói khám thành công!",
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Type package not found!",
+                message: "Không tìm thấy loại gói khám trên hệ thống!",
               });
             }
           }
@@ -240,7 +235,6 @@ export {
   createTypePackage,
   getAllTypePackages,
   getDetailTypePackage,
-  updateImageTypePackage,
-  updateInfoTypePackage,
+  updateTypePackage,
   deleteTypePackage,
 };

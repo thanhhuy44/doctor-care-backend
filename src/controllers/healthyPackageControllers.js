@@ -3,7 +3,7 @@ import {
   deletePackage,
   getAllPackages,
   getDetailPackages,
-  updateInfoPackage,
+  updatePackage,
 } from "../services/healthPackageServices.js";
 
 const handleCreatePackage = async (req, res) => {
@@ -21,12 +21,12 @@ const handleGetDetailPackage = async (req, res) => {
   return res.json(result);
 };
 
-const handleUpdateInfoPackage = async (req, res) => {
-  let result = await updateInfoPackage(req.params.id, req.body);
-  return res.json(result);
-};
-const handleUpdateImagePackage = async (req, res) => {
-  let result = await updateInfoPackage(req.params.id, req.files.image);
+const handleUpdatePackage = async (req, res) => {
+  let result = await updatePackage(
+    req.params.id,
+    req.files ? req.files.image : 0,
+    req.body
+  );
   return res.json(result);
 };
 
@@ -39,7 +39,6 @@ export {
   handleCreatePackage,
   handleGetAllPackages,
   handleGetDetailPackage,
-  handleUpdateImagePackage,
-  handleUpdateInfoPackage,
+  handleUpdatePackage,
   handleDeletePackage,
 };

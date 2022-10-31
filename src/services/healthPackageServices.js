@@ -158,87 +158,82 @@ const getDetailPackages = (id) => {
   });
 };
 
-const updateInfoPackage = (id, data) => {
+const updatePackage = (id, image, data) => {
   return new Promise((resolve, reject) => {
     try {
-      HealthPackage.findByIdAndUpdate(
-        {
-          _id: mongoose.Types.ObjectId(id),
-        },
-        data,
-        (error, result) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            if (result) {
-              resolve({
-                errCode: 0,
-                message: "Successful!",
-                data: result,
-              });
-            } else {
+      if (image === 0) {
+        HealthPackage.findByIdAndUpdate(
+          {
+            _id: mongoose.Types.ObjectId(id),
+          },
+          data,
+          (error, result) => {
+            if (error) {
               resolve({
                 errCode: 1,
-                message: "Package not found!",
+                message: error.message,
               });
+            } else {
+              if (result) {
+                resolve({
+                  errCode: 0,
+                  message: "Cập nhật thông tin gói khám thành công!",
+                  data: result,
+                });
+              } else {
+                resolve({
+                  errCode: 1,
+                  message: "Không tìm thấy gói khám trên hệ thống!",
+                });
+              }
             }
           }
-        }
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-const updateImagePackage = (id, image) => {
-  return new Promise((resolve, reject) => {
-    try {
-      let fileName = image.name.split(" ").join("-");
-      image.mv(
-        path.resolve("./src/assets/images/packages", fileName),
-        (error) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            HealthPackage.findByIdAndUpdate(
-              {
-                _id: mongoose.Types.ObjectId(id),
-              },
-              {
-                image: `${process.env.BASE_URL}/images/packages/${fileName}`,
-              },
-              (error, result) => {
-                if (error) {
-                  resolve({
-                    errCode: 1,
-                    message: error.message,
-                  });
-                } else {
-                  if (result) {
-                    resolve({
-                      errCode: 0,
-                      message: "Update image package successfully!",
-                      data: result,
-                    });
-                  } else {
+        );
+      } else {
+        let fileName = image.name.split(" ").join("-");
+        image.mv(
+          path.resolve("./src/assets/images/packages", fileName),
+          (error) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              HealthPackage.findByIdAndUpdate(
+                {
+                  _id: mongoose.Types.ObjectId(id),
+                },
+                {
+                  ...data,
+                  image: `${process.env.BASE_URL}/images/packages/${fileName}`,
+                },
+                (error, result) => {
+                  if (error) {
                     resolve({
                       errCode: 1,
-                      message: "Package not found",
+                      message: error.message,
                     });
+                  } else {
+                    if (result) {
+                      resolve({
+                        errCode: 0,
+                        message: "Cập nhật thông tin gói khám thành công!",
+                        data: result,
+                      });
+                    } else {
+                      resolve({
+                        errCode: 1,
+                        message: "Không tìm thấy gói khám trên hệ thống!",
+                      });
+                    }
                   }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      }
     } catch (e) {
       reject(e);
     }
@@ -283,7 +278,6 @@ export {
   createPackage,
   getAllPackages,
   getDetailPackages,
-  updateImagePackage,
-  updateInfoPackage,
+  updatePackage,
   deletePackage,
 };

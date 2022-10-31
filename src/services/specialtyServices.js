@@ -114,126 +114,80 @@ const getDetailSpecialty = (id) => {
   });
 };
 
-// (error, specialty) => {
-//   if (error) {
-//     resolve({
-//       errCode: 1,
-//       message: error.message,
-//     });
-//   } else {
-//     if (specialty) {
-//       Doctor.find({ specialty: specialty._id })
-//         .populate({
-//           path: "hospital",
-//           select: "_id name alias link location address",
-//         })
-//         .exec((error, doctor) => {
-//           if (error) {
-//             resolve({
-//               errCode: 1,
-//               message: error.message,
-//             });
-//           } else {
-//             resolve({
-//               errCode: 0,
-//               message: "Successful!",
-//               data: {
-//                 name: specialty.name,
-//                 description: specialty.description,
-//                 image: specialty.image,
-//                 doctors: doctor,
-//               },
-//             });
-//           }
-//         });
-//     } else {
-//       resolve({
-//         errCode: 1,
-//         message: "Specialty not found",
-//       });
-//     }
-//   }
-// }
-
-const updateInfoSpecialty = (id, data) => {
+const updateSpecialty = (id, image, data) => {
   return new Promise((resolve, reject) => {
     try {
-      Specialty.findByIdAndUpdate(
-        { _id: mongoose.Types.ObjectId(id) },
-        data,
-        (error, result) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            if (result) {
-              resolve({
-                errCode: 0,
-                message: "Update info successfully!",
-                data: result,
-              });
-            } else {
+      if (image === 0) {
+        Specialty.findByIdAndUpdate(
+          { _id: mongoose.Types.ObjectId(id) },
+          data,
+          (error, result) => {
+            if (error) {
               resolve({
                 errCode: 1,
-                message: "Specialty not found!",
+                message: error.message,
               });
+            } else {
+              if (result) {
+                resolve({
+                  errCode: 0,
+                  message: "Cập nhật thông tin chuyên khoa thành công!",
+                  data: result,
+                });
+              } else {
+                resolve({
+                  errCode: 1,
+                  message: "Không tìm thấy chuyên khoa trên hệ thống!",
+                });
+              }
             }
           }
-        }
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-const updateImageSpecialty = (id, image) => {
-  return new Promise((resolve, reject) => {
-    try {
-      let fileName = image.name.split(" ").join("-");
-      image.mv(
-        path.resolve("./src/assets/images/specialties", fileName),
-        (error) => {
-          if (error) {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          } else {
-            Specialty.findByIdAndUpdate(
-              {
-                _id: mongoose.Types.ObjectId(id),
-              },
-              {
-                image: `${process.env.BASE_URL}/images/specialties/${fileName}`,
-              },
-              (error, result) => {
-                if (error) {
-                  resolve({
-                    errCode: 1,
-                    message: error.message,
-                  });
-                } else {
-                  if (result) {
-                    resolve({
-                      errCode: 0,
-                      message: "Update image specialty successfully!",
-                      data: result,
-                    });
-                  } else {
+        );
+      } else {
+        let fileName = image.name.split(" ").join("-");
+        image.mv(
+          path.resolve("./src/assets/images/specialties", fileName),
+          (error) => {
+            if (error) {
+              resolve({
+                errCode: 1,
+                message: error.message,
+              });
+            } else {
+              Specialty.findByIdAndUpdate(
+                {
+                  _id: mongoose.Types.ObjectId(id),
+                },
+                {
+                  ...data,
+                  image: `${process.env.BASE_URL}/images/specialties/${fileName}`,
+                },
+                (error, result) => {
+                  if (error) {
                     resolve({
                       errCode: 1,
-                      message: "Specialty not found",
+                      message: error.message,
                     });
+                  } else {
+                    if (result) {
+                      resolve({
+                        errCode: 0,
+                        message: "Cập nhật chuyên khoa thành công!",
+                        data: result,
+                      });
+                    } else {
+                      resolve({
+                        errCode: 1,
+                        message: "Không tìm thấy chuyên khoa trên hệ thống!",
+                      });
+                    }
                   }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      }
     } catch (e) {
       reject(e);
     }
@@ -278,7 +232,6 @@ export {
   createSpecialty,
   getAllSpecialties,
   getDetailSpecialty,
-  updateInfoSpecialty,
-  updateImageSpecialty,
+  updateSpecialty,
   deleteSpecialty,
 };

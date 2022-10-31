@@ -2,9 +2,8 @@ import {
   getDetailSpecialty,
   createSpecialty,
   getAllSpecialties,
-  updateInfoSpecialty,
-  updateImageSpecialty,
   deleteSpecialty,
+  updateSpecialty,
 } from "../services/specialtyServices.js";
 
 const handleCreateSpecialty = async (req, res) => {
@@ -22,13 +21,12 @@ const handleGetSpecialtyById = async (req, res) => {
   return res.json(result);
 };
 
-const handleUpdateInfoSpecialty = async (req, res) => {
-  let result = await updateInfoSpecialty(req.params.id, req.body);
-  return res.json(result);
-};
-
-const handleUpdateImageSpecialty = async (req, res) => {
-  let result = await updateImageSpecialty(req.params.id, req.files.image);
+const handleUpdateSpecialty = async (req, res) => {
+  let result = await updateSpecialty(
+    req.params.id,
+    req.files ? req.files.image : 0,
+    req.body
+  );
   return res.json(result);
 };
 
@@ -41,7 +39,6 @@ export {
   handleCreateSpecialty,
   handleGetAllSpecialties,
   handleGetSpecialtyById,
-  handleUpdateInfoSpecialty,
-  handleUpdateImageSpecialty,
   handleDeleteSpecialty,
+  handleUpdateSpecialty,
 };
