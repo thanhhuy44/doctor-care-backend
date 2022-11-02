@@ -3,6 +3,7 @@ import {
   createBooking,
   getAllBookings,
   getBookingsOfUser,
+  updateBooking,
 } from "../services/bookingServices.js";
 
 const handleCreateBooking = async (req, res) => {
@@ -25,9 +26,15 @@ const handleDeleteBooking = async (req, res) => {
   return res.status(200).json(result);
 };
 
+const handleUpdateBooking = async (req, res) => {
+  let result = await updateBooking(req.params.id, req.body);
+  return res.status(200).json(result);
+};
+
 export {
   handleCreateBooking,
   handleDeleteBooking,
   handleGetAllBookings,
   handleGetOneBooking,
+  handleUpdateBooking,
 };

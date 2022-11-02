@@ -149,6 +149,10 @@ const getDetailDoctor = (id) => {
         .populate({
           path: "booking",
         })
+        .populate({
+          path: "reviews",
+          select: "_id name content",
+        })
         .exec((error, doctor) => {
           if (error) {
             resolve({
@@ -436,7 +440,7 @@ const doctorLogin = (email, password) => {
       Doctor.findOne({
         email: email,
       })
-        .select("name image birth phoneNumber password")
+        .select("name image birth email phoneNumber password")
         .exec((error, doctor) => {
           if (error) {
             resolve({

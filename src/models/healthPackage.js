@@ -28,6 +28,12 @@ const HealthPackageSchema = new Schema(
         ref: "Booking",
       },
     ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     typeMedical: { type: Number, required: true, default: 2 },
   },
   {

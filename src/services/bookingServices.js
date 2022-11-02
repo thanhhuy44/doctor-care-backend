@@ -143,6 +143,41 @@ const getBookingsOfUser = (userId) => {
   });
 };
 
+const updateBooking = (id, data) => {
+  return new Promise((resolve, reject) => {
+    try {
+      Booking.findByIdAndUpdate(
+        {
+          _id: mongoose.Types.ObjectId(id),
+        },
+        { ...data }
+      ).exec((error, result) => {
+        if (error) {
+          resolve({
+            errCode: 1,
+            message: error.message,
+          });
+        } else {
+          if (result) {
+            resolve({
+              errCode: 0,
+              message: "Successful!",
+              data: result,
+            });
+          } else {
+            resolve({
+              errCode: 1,
+              message: "Not found booking",
+            });
+          }
+        }
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 const cancelBooking = (id) => {
   return new Promise((resolve, reject) => {
     try {
@@ -177,4 +212,10 @@ const cancelBooking = (id) => {
   });
 };
 
-export { createBooking, getAllBookings, getBookingsOfUser, cancelBooking };
+export {
+  createBooking,
+  getAllBookings,
+  getBookingsOfUser,
+  cancelBooking,
+  updateBooking,
+};

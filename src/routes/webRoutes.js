@@ -46,6 +46,7 @@ import {
   handleDeleteBooking,
   handleGetAllBookings,
   handleGetOneBooking,
+  handleUpdateBooking,
 } from "../controllers/bookingControllers.js";
 
 import {
@@ -79,6 +80,10 @@ import {
   handleGetDetailPost,
 } from "../controllers/postControllers.js";
 import { handleSearch } from "../controllers/searchControllers.js";
+import {
+  handleCreateReview,
+  handleGetAllReviews,
+} from "../controllers/reviewControllers.js";
 
 const router = express.Router();
 
@@ -163,7 +168,7 @@ const webRoutes = (app) => {
 
   router.get("/api/booking/:id", handleGetOneBooking); //Xem 1 đơn hàng
 
-  router.post("/api/booking/update/:id"); //Sửa 1 đơn hàng
+  router.post("/api/booking/update/:id", handleUpdateBooking); //Sửa 1 đơn hàng
 
   router.post("/api/booking/delete/:id", handleDeleteBooking); //Xóa 1 đơn hàng
 
@@ -193,6 +198,11 @@ const webRoutes = (app) => {
   router.get("/api/posts", handleGetAllPosts);
   router.get("/api/post/:id", handleGetDetailPost);
   router.post("/api/post/delete/:id", handleDeletePost);
+
+  ///////////////
+
+  router.post("/api/review/create", handleCreateReview);
+  router.get("/api/reviews", handleGetAllReviews);
 
   ///////////////
   router.get("/api/home", handleGetHomePage);

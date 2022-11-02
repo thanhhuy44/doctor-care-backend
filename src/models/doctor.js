@@ -38,6 +38,12 @@ const DoctorSchema = new Schema(
         ref: "Booking",
       },
     ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
     image: { type: String, required: true },
     price: { type: Number, required: true },
     typeMedical: { type: Number, required: true, default: 1 },
