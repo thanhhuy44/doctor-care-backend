@@ -3,6 +3,7 @@ import {
   deletePackage,
   getAllPackages,
   getDetailPackages,
+  searchPackage,
   updatePackage,
 } from "../services/healthPackageServices.js";
 
@@ -35,10 +36,16 @@ const handleDeletePackage = async (req, res) => {
   return res.json(result);
 };
 
+const handleSearchPackage = async (req, res) => {
+  let result = await searchPackage(req.query.keyword);
+  return res.json(result);
+};
+
 export {
   handleCreatePackage,
   handleGetAllPackages,
   handleGetDetailPackage,
   handleUpdatePackage,
   handleDeletePackage,
+  handleSearchPackage,
 };

@@ -5,7 +5,7 @@ const BookingSchema = new Schema(
   {
     _id: { type: mongoose.Schema.Types.ObjectId, required: true },
     name: { type: String, required: true },
-    numberPhone: { type: Number, required: true },
+    numberPhone: { type: String, required: true },
     email: { type: String, required: true },
     address: { type: String, required: true },
     doctor: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor" },
@@ -13,7 +13,7 @@ const BookingSchema = new Schema(
     date: { type: Date, required: true },
     time: { type: Number, required: true },
     reason: { type: String },
-    status: { type: String, required: true, default: "waiting" },
+    status: { type: String, required: true, default: "on-confirm" },
   },
   {
     toJSON: {

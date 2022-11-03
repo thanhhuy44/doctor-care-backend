@@ -228,10 +228,44 @@ const deleteSpecialty = (id) => {
   });
 };
 
+const searchSpecialty = (keyword) => {
+  return new Promise((resolve, reject) => {
+    try {
+      Specialty.find(
+        { name: { $regex: keyword, $options: "i" } },
+        (error, data) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            if (data) {
+              resolve({
+                errCode: 0,
+                message: "Thành công!",
+                data: data,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Không có kết quả!",
+              });
+            }
+          }
+        }
+      );
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export {
   createSpecialty,
   getAllSpecialties,
   getDetailSpecialty,
   updateSpecialty,
   deleteSpecialty,
+  searchSpecialty,
 };

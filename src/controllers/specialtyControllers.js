@@ -4,6 +4,7 @@ import {
   getAllSpecialties,
   deleteSpecialty,
   updateSpecialty,
+  searchSpecialty,
 } from "../services/specialtyServices.js";
 
 const handleCreateSpecialty = async (req, res) => {
@@ -35,10 +36,16 @@ const handleDeleteSpecialty = async (req, res) => {
   return res.send(result);
 };
 
+const handleSearchSpecialty = async (req, res) => {
+  let result = await searchSpecialty(req.query.keyword);
+  return res.send(result);
+};
+
 export {
   handleCreateSpecialty,
   handleGetAllSpecialties,
   handleGetSpecialtyById,
   handleDeleteSpecialty,
   handleUpdateSpecialty,
+  handleSearchSpecialty,
 };

@@ -13,6 +13,7 @@ import {
   handleDeletePackage,
   handleGetAllPackages,
   handleGetDetailPackage,
+  handleSearchPackage,
   handleUpdatePackage,
 } from "../controllers/healthyPackageControllers.js";
 
@@ -30,6 +31,7 @@ import {
   handleDeleteSpecialty,
   handleGetAllSpecialties,
   handleGetSpecialtyById,
+  handleSearchSpecialty,
   handleUpdateSpecialty,
 } from "../controllers/specialtyControllers.js";
 
@@ -39,6 +41,7 @@ import {
   handleGetOneTypePackage,
   handleDeleteTypePackage,
   handleUpdateTypePackage,
+  handleSearchTypePackage,
 } from "../controllers/typePackageControllers.js";
 
 import {
@@ -133,6 +136,7 @@ const webRoutes = (app) => {
   router.post("/api/specialty/update/:id", handleUpdateSpecialty); //Sửa thong tin 1 chuyên khoa
 
   router.post("/api/specialty/delete/:id", handleDeleteSpecialty); //Xóa 1 chuyên khoa
+  router.post("/api/specialty/search", handleSearchSpecialty);
 
   /////////////////
 
@@ -146,6 +150,7 @@ const webRoutes = (app) => {
   router.post("/api/package/update/:id", handleUpdatePackage); //Sửa thong tin 1 gói khám
 
   router.post("/api/package/delete/:id", handleDeletePackage); //Xóa 1 gói khám
+  router.post("/api/package/search", handleSearchPackage); //Tiem kiem gói khám
 
   /////////////////
 
@@ -157,6 +162,8 @@ const webRoutes = (app) => {
   router.get("/api/type-packages", handleGetAllTypePackages); //Xem tất cả loại gói khám
 
   router.post("/api/type-package/update/:id", handleUpdateTypePackage); //Sửa thong tin loại gói khám
+
+  router.post("/api/type-package/search", handleSearchTypePackage); //Tim kiem loai goi kham
 
   router.post("/api/type-package/delete/:id", handleDeleteTypePackage); //Xóa loại gói khám
 

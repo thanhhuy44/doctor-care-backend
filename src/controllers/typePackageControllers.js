@@ -3,6 +3,7 @@ import {
   deleteTypePackage,
   getAllTypePackages,
   getDetailTypePackage,
+  searchTypePackage,
   updateTypePackage,
 } from "../services/typePackageServices.js";
 
@@ -35,10 +36,16 @@ const handleDeleteTypePackage = async (req, res) => {
   return res.json(result);
 };
 
+const handleSearchTypePackage = async (req, res) => {
+  let result = await searchTypePackage(req.query.keyword);
+  return res.json(result);
+};
+
 export {
   handleCreateTypePackage,
   handleGetAllTypePackages,
   handleGetOneTypePackage,
   handleUpdateTypePackage,
   handleDeleteTypePackage,
+  handleSearchTypePackage,
 };
