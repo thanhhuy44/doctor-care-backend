@@ -70,11 +70,14 @@ import {
   checkReNewPassword,
 } from "../middleWares/middleWares.js";
 import {
-  handleAdminchangeImage,
-  handleAdminChangeInfo,
   handleAdminChangePassword,
   handleAdminLogin,
   handleCreateAdmin,
+  handleDeleteAdmin,
+  handleGetAllAdmin,
+  handleGetOneAdmin,
+  handleSearchAdmin,
+  handleUpdateAdmin,
 } from "../controllers/adminControllers.js";
 import {
   handleGetHomePage,
@@ -201,10 +204,13 @@ const webRoutes = (app) => {
   ////////////////
 
   router.post("/api/admin/create", handleCreateAdmin); //Thêm một admin
+  router.get("/api/admins", handleGetAllAdmin); //Thêm một admin
+  router.get("/api/admin/:id", handleGetOneAdmin); //Thêm một admin
   router.post("/api/admin/login", handleAdminLogin); //Đăng nhập
-  router.post("/api/admin/change-info/:id", handleAdminChangeInfo); //Thay đổi thông tin admin
-  router.post("/api/admin/change-image", handleAdminchangeImage); //Thay đổi hình ảnh admnin
-  router.post("/api/admin/change-password/:id", handleAdminChangePassword); //Thay đổi mật khẩu admin
+  router.post("/api/admin/update/:id", handleUpdateAdmin);
+  router.post("/api/admin/change-password/:id", handleAdminChangePassword);
+  router.post("/api/admin/delete/:id", handleDeleteAdmin);
+  router.post("/api/admin/search", handleSearchAdmin);
 
   ////////////////
 

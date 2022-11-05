@@ -440,7 +440,7 @@ const doctorLogin = (email, password) => {
       Doctor.findOne({
         email: email,
       })
-        .select("name image birth email phoneNumber password")
+        .select("name image birth email phoneNumber password _id")
         .exec((error, doctor) => {
           if (error) {
             resolve({
@@ -480,49 +480,51 @@ const doctorLogin = (email, password) => {
 const doctorChangePassword = (id, password, newPassword) => {
   return new Promise(async (resolve, reject) => {
     try {
-      Doctor.findById({ _id: mongoose.Types.ObjectId(id) }, (error, doctor) => {
-        if (error) {
-          resolve({
-            errCode: 1,
-            message: "Lỗi!",
-          });
-        } else {
-          if (doctor) {
-            bcrypt.compare(password, doctor.password, async (error, same) => {
-              if (same) {
-                let hashPass = await bcrypt.hash(newPassword, 10);
-                Doctor.findByIdAndUpdate(
-                  { _id: mongoose.Types.ObjectId(id) },
-                  { password: hashPass },
-                  (error, result) => {
-                    if (result) {
-                      resolve({
-                        errCode: 0,
-                        message: "Thay đổi mật khẩu thành công!",
-                      });
-                    } else {
-                      resolve({
-                        errCode: 1,
-                        message: "Lỗi!",
-                      });
-                    }
-                  }
-                );
-              } else {
-                resolve({
-                  errCode: 1,
-                  message: "Sai Mật khẩu!",
-                });
-              }
-            });
-          } else {
+      Doctor.findOne({ _id: mongoose.Types.ObjectId(id) })
+        .select("name password _id")
+        .exec((error, result) => {
+          if (error) {
             resolve({
               errCode: 1,
-              message: "Không tìm thấy bác sĩ trên hệ thống!!!",
+              message: "Lỗi!",
             });
+          } else {
+            if (result) {
+              bcrypt.compare(password, result.password, async (error, same) => {
+                if (same) {
+                  let hashPass = await bcrypt.hash(newPassword, 10);
+                  Doctor.findOneAndUpdate(
+                    { _id: mongoose.Types.ObjectId(id) },
+                    { password: hashPass },
+                    (error, result) => {
+                      if (result) {
+                        resolve({
+                          errCode: 0,
+                          message: "Thay đổi mật khẩu thành công!",
+                        });
+                      } else {
+                        resolve({
+                          errCode: 1,
+                          message: "Lỗi!",
+                        });
+                      }
+                    }
+                  );
+                } else {
+                  resolve({
+                    errCode: 1,
+                    message: "Sai Mật khẩu!",
+                  });
+                }
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Không tìm thấy bác sĩ trên hệ thống!!!",
+              });
+            }
           }
-        }
-      });
+        });
     } catch (e) {
       reject(e);
     }
