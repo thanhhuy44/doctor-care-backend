@@ -94,14 +94,14 @@ const adminLogin = (userName, password) => {
   });
 };
 
-const adminChangePassword = (userName, password, newPassword) => {
+const adminChangePassword = (id, password, newPassword) => {
   return new Promise(async (resolve, reject) => {
     try {
-      Admin.findOne({ userName: userName }, (error, result) => {
+      Admin.findOne({ _id: mongoose.Types.ObjectId(id) }, (error, result) => {
         if (error) {
           resolve({
             errCode: 1,
-            message: "Error",
+            message: "Lỗi!",
           });
         } else {
           if (result) {
@@ -109,18 +109,18 @@ const adminChangePassword = (userName, password, newPassword) => {
               if (same) {
                 let hashPass = await bcrypt.hash(newPassword, 10);
                 Admin.findOneAndUpdate(
-                  { userName: userName },
+                  { _id: mongoose.Types.ObjectId(id) },
                   { password: hashPass },
                   (error, result) => {
                     if (result) {
                       resolve({
                         errCode: 0,
-                        message: "Change password successfully!",
+                        message: "Thay đổi mật khẩu thành công!",
                       });
                     } else {
                       resolve({
                         errCode: 1,
-                        message: "Error!",
+                        message: "Lỗi!",
                       });
                     }
                   }
@@ -128,14 +128,14 @@ const adminChangePassword = (userName, password, newPassword) => {
               } else {
                 resolve({
                   errCode: 1,
-                  message: "Wrong password!",
+                  message: "Sai Mật khẩu!",
                 });
               }
             });
           } else {
             resolve({
               errCode: 1,
-              message: "User not found!!!",
+              message: "Không tìm thấy admin trên hệ thống!!!",
             });
           }
         }

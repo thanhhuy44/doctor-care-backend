@@ -28,7 +28,7 @@ const handleAdminchangeImage = async (req, res) => {
 
 const handleAdminChangePassword = async (req, res) => {
   let result = await adminChangePassword(
-    req.body.userName,
+    req.params.id,
     req.body.password,
     req.body.newPassword
   );

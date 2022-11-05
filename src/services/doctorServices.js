@@ -477,6 +477,58 @@ const doctorLogin = (email, password) => {
   });
 };
 
+const doctorChangePassword = (id, password, newPassword) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      Doctor.findById({ _id: mongoose.Types.ObjectId(id) }, (error, doctor) => {
+        if (error) {
+          resolve({
+            errCode: 1,
+            message: "Lỗi!",
+          });
+        } else {
+          if (doctor) {
+            bcrypt.compare(password, doctor.password, async (error, same) => {
+              if (same) {
+                let hashPass = await bcrypt.hash(newPassword, 10);
+                Doctor.findByIdAndUpdate(
+                  { _id: mongoose.Types.ObjectId(id) },
+                  { password: hashPass },
+                  (error, result) => {
+                    if (result) {
+                      resolve({
+                        errCode: 0,
+                        message: "Thay đổi mật khẩu thành công!",
+                      });
+                    } else {
+                      resolve({
+                        errCode: 1,
+                        message: "Lỗi!",
+                      });
+                    }
+                  }
+                );
+              } else {
+                resolve({
+                  errCode: 1,
+                  message: "Sai Mật khẩu!",
+                });
+              }
+            });
+          } else {
+            resolve({
+              errCode: 1,
+              message: "Không tìm thấy bác sĩ trên hệ thống!!!",
+            });
+          }
+        }
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export {
   createDoctor,
   getDetailDoctor,
@@ -487,4 +539,5 @@ export {
   searchDoctor,
   findDoctorWithFilter,
   doctorLogin,
+  doctorChangePassword,
 };

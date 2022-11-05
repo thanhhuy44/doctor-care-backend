@@ -7,6 +7,7 @@ import {
   handleGetAllDoctors,
   handleSearchDoctor,
   handleDoctorLogin,
+  handleChangePasswordDoctor,
 } from "../controllers/doctorControllers.js";
 import {
   handleCreatePackage,
@@ -75,14 +76,18 @@ import {
   handleAdminLogin,
   handleCreateAdmin,
 } from "../controllers/adminControllers.js";
-import { handleGetHomePage } from "../controllers/pageControllers.js";
+import {
+  handleGetHomePage,
+  handleSearch,
+} from "../controllers/pageControllers.js";
 import {
   handleCreatePost,
   handleDeletePost,
   handleGetAllPosts,
   handleGetDetailPost,
+  handleSearchPost,
+  handleUpdatePost,
 } from "../controllers/postControllers.js";
-import { handleSearch } from "../controllers/searchControllers.js";
 import {
   handleCreateReview,
   handleGetAllReviews,
@@ -107,6 +112,8 @@ const webRoutes = (app) => {
   router.post("/api/doctor/delete/:id", handleDeleteDoctor); //Xóa 1 bác sĩ
 
   router.post("/api/doctor/login", handleDoctorLogin);
+
+  router.post("/api/doctor/change-password/:id", handleChangePasswordDoctor);
 
   // router.use("/api/create-doctor", validateData); // Validate form
 
@@ -197,14 +204,16 @@ const webRoutes = (app) => {
   router.post("/api/admin/login", handleAdminLogin); //Đăng nhập
   router.post("/api/admin/change-info/:id", handleAdminChangeInfo); //Thay đổi thông tin admin
   router.post("/api/admin/change-image", handleAdminchangeImage); //Thay đổi hình ảnh admnin
-  router.post("/api/admin/change-password", handleAdminChangePassword); //Thay đổi mật khẩu admin
+  router.post("/api/admin/change-password/:id", handleAdminChangePassword); //Thay đổi mật khẩu admin
 
   ////////////////
 
   router.post("/api/post/create", handleCreatePost);
   router.get("/api/posts", handleGetAllPosts);
   router.get("/api/post/:id", handleGetDetailPost);
+  router.post("/api/post/update/:id", handleUpdatePost);
   router.post("/api/post/delete/:id", handleDeletePost);
+  router.post("/api/post/search", handleSearchPost);
 
   ///////////////
 
@@ -213,6 +222,7 @@ const webRoutes = (app) => {
 
   ///////////////
   router.get("/api/home", handleGetHomePage);
+  router.post("/api/search", handleSearch);
 
   ///////////////
 

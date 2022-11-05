@@ -100,6 +100,59 @@ const getHome = () => {
   });
 };
 
-const search = () => {};
+const search = (keyword) => {
+  return new Promise((resolve, reject) => {
+    try {
+      var promises = [];
+      promises.push(
+        Doctor.find({ name: { $regex: keyword, $options: "i" } })
+          .lean()
+          .exec()
+      );
+      promises.push(
+        Hospital.find({ name: { $regex: keyword, $options: "i" } })
+          .lean()
+          .exec()
+      );
+      promises.push(
+        Specialty.find({ name: { $regex: keyword, $options: "i" } })
+          .lean()
+          .exec()
+      );
+      promises.push(
+        HealthPackage.find({ name: { $regex: keyword, $options: "i" } })
+          .lean()
+          .exec()
+      );
+      promises.push(
+        Post.find({ title: { $regex: keyword, $options: "i" } })
+          .lean()
+          .exec()
+      );
+      Promise.all(promises)
+        .then((results) => {
+          resolve({
+            errCode: 0,
+            message: "Thành công!",
+            data: [
+              { name: "Bác sĩ", data: results[0] },
+              { name: "Cơ sở y tế", data: results[1] },
+              { name: "Chuyên khoa", data: results[2] },
+              { name: "Gói khám", data: results[3] },
+              { name: "Bài viết", data: results[4] },
+            ],
+          });
+        })
+        .catch((error) => {
+          resolve({
+            errCode: 1,
+            message: error.message,
+          });
+        });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 
-export { getHome };
+export { getHome, search };
