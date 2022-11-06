@@ -4,7 +4,6 @@ import HealthPackage from "../models/healthPackage.js";
 import Review from "../models/review.js";
 
 const createReview = (data) => {
-  console.log(data);
   return new Promise((resolve, reject) => {
     try {
       let id = mongoose.Types.ObjectId();

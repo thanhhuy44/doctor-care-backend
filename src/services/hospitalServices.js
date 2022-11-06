@@ -101,11 +101,15 @@ const getDetailHospital = (id) => {
       })
         .populate({
           path: "doctors",
-          select: "_id firstName lastName image specialty hospital alias link",
+          populate: {
+            path: "booking",
+          },
         })
         .populate({
           path: "healthPackages",
-          select: "_id name image typePackage hospital alias link",
+          populate: {
+            path: "booking",
+          },
         })
         .exec((error, result) => {
           if (error) {
