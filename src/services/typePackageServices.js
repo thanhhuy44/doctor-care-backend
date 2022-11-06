@@ -13,7 +13,7 @@ const createTypePackage = (data, image) => {
           if (error) {
             resolve({
               errCode: 1,
-              message: "Error",
+              message: "Lỗi",
             });
           } else {
             let id = mongoose.Types.ObjectId();
@@ -30,7 +30,7 @@ const createTypePackage = (data, image) => {
                 if (result) {
                   resolve({
                     errCode: 0,
-                    message: "Create Type Package successful",
+                    message: "Thêm loại gói khám vào hệ thống thành công",
                     data: result,
                   });
                 } else {
@@ -100,13 +100,13 @@ const getDetailTypePackage = (id) => {
             if (result) {
               resolve({
                 errCode: 0,
-                message: "Successfully!",
+                message: "Thành công!",
                 data: result,
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Type Package not found!",
+                message: "Không tìm thấy loại gói khám!",
               });
             }
           }

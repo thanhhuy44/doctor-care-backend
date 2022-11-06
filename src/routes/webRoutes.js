@@ -94,6 +94,7 @@ import {
 import {
   handleCreateReview,
   handleGetAllReviews,
+  handleSearchReview,
 } from "../controllers/reviewControllers.js";
 
 const router = express.Router();
@@ -224,6 +225,7 @@ const webRoutes = (app) => {
   ///////////////
 
   router.post("/api/review/create", handleCreateReview);
+  router.post("/api/review/search", handleSearchReview);
   router.get("/api/reviews", handleGetAllReviews);
 
   ///////////////

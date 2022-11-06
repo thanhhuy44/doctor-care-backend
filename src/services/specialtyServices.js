@@ -16,7 +16,7 @@ const createSpecialty = (data, image) => {
           if (error) {
             resolve({
               errCode: 1,
-              message: "Error",
+              message: "Lỗi",
             });
           } else {
             let id = mongoose.Types.ObjectId();
@@ -37,7 +37,7 @@ const createSpecialty = (data, image) => {
                 } else {
                   resolve({
                     errCode: 0,
-                    message: "Create specialty is successful!",
+                    message: "Thêm chuyên khoa vào hệ thống thành công!",
                     data: result,
                   });
                 }
@@ -211,12 +211,12 @@ const deleteSpecialty = (id) => {
             if (result) {
               resolve({
                 errCode: 0,
-                message: "Delete Successfully!",
+                message: "Xóa chuyên khoa khỏi hệ thống thành công!",
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Specialty not found!",
+                message: "Không tìm thấy chuyên khoa trên hệ thống!",
               });
             }
           }

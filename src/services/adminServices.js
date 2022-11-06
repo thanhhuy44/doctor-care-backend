@@ -32,7 +32,7 @@ const createAdmin = (data, image) => {
             if (error) {
               resolve({
                 errCode: 1,
-                message: "Error",
+                message: "Lỗi",
               });
             } else {
               let id = mongoose.Types.ObjectId();
@@ -89,20 +89,20 @@ const adminLogin = (userName, password) => {
                 if (same) {
                   resolve({
                     errCode: 0,
-                    message: "Login sucessfully!",
+                    message: "Đăng nhập thành công!",
                     data: admin,
                   });
                 } else {
                   resolve({
                     errCode: 1,
-                    message: "Wrong password!",
+                    message: "Sai mật khẩu!",
                   });
                 }
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Admin not found!",
+                message: "Không tìm thấy quản trị viên!",
               });
             }
           }
@@ -287,13 +287,13 @@ const updateAdmin = (id, image, data) => {
                     if (admin) {
                       resolve({
                         errCode: 0,
-                        message: "Update admin's image successfully!",
+                        message: "Cập nhật thông tin quản trị viên thành công!",
                         data: admin,
                       });
                     } else {
                       resolve({
                         errCode: 1,
-                        message: "Admin not found",
+                        message: "Không tìm thấy quản trị viên trên hệ thống!",
                       });
                     }
                   }

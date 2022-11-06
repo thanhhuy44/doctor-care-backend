@@ -32,7 +32,7 @@ const createReview = (data) => {
                   } else {
                     resolve({
                       errCode: 0,
-                      message: "Create successfully!",
+                      message: "Đánh giá thành công!",
                       data: result,
                     });
                   }
@@ -52,7 +52,7 @@ const createReview = (data) => {
                   } else {
                     resolve({
                       errCode: 0,
-                      message: "Create successfully!",
+                      message: "Đánh giá thành công!",
                       data: result,
                     });
                   }
@@ -60,13 +60,13 @@ const createReview = (data) => {
               } else {
                 resolve({
                   errCode: 1,
-                  message: "Error 1!",
+                  message: "Không thành công!",
                 });
               }
             } else {
               resolve({
                 errCode: 1,
-                message: "Error!",
+                message: "Không thành công!",
               });
             }
           }
@@ -108,4 +108,40 @@ const getAllReviews = () => {
   });
 };
 
-export { createReview, getAllReviews };
+const searchReview = (keyword, doctor) => {
+  return new Promise((resolve, reject) => {
+    try {
+      Review.find(
+        {
+          name: { $regex: keyword, $options: "i" },
+          doctor: mongoose.Types.ObjectId(doctor),
+        },
+        (error, data) => {
+          if (error) {
+            resolve({
+              errCode: 1,
+              message: error.message,
+            });
+          } else {
+            if (data) {
+              resolve({
+                errCode: 0,
+                message: "Thành công!",
+                data: data,
+              });
+            } else {
+              resolve({
+                errCode: 1,
+                message: "Không có kết quả!",
+              });
+            }
+          }
+        }
+      );
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export { createReview, getAllReviews, searchReview };

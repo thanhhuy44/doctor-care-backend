@@ -27,7 +27,7 @@ const createBooking = (data) => {
                 } else {
                   resolve({
                     errCode: 0,
-                    message: "Create successfully!",
+                    message: "Đặt lịch khám thành công!",
                     data: result,
                   });
                 }
@@ -47,7 +47,7 @@ const createBooking = (data) => {
                 } else {
                   resolve({
                     errCode: 0,
-                    message: "Create successfully!",
+                    message: "Đặt lịch khám thành công!",
                     data: result,
                   });
                 }
@@ -55,13 +55,13 @@ const createBooking = (data) => {
             } else {
               resolve({
                 errCode: 1,
-                message: "Error!",
+                message: "Lỗi!",
               });
             }
           } else {
             resolve({
               errCode: 1,
-              message: "Error!",
+              message: "Lỗi!",
             });
           }
         }

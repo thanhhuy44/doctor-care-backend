@@ -14,7 +14,7 @@ const createPackage = (data, image) => {
           if (error) {
             resolve({
               errCode: 1,
-              message: "Error",
+              message: "Lỗi",
             });
           } else {
             let id = mongoose.Types.ObjectId();
@@ -38,7 +38,7 @@ const createPackage = (data, image) => {
                     if (error) {
                       resolve({
                         errCode: 1,
-                        message: "Error!",
+                        message: "Lỗi!",
                       });
                     } else {
                       TypePackage.findByIdAndUpdate(
@@ -50,12 +50,12 @@ const createPackage = (data, image) => {
                         if (error) {
                           resolve({
                             errCode: 1,
-                            message: "Error!",
+                            message: "Lỗi!",
                           });
                         } else {
                           resolve({
                             errCode: 0,
-                            message: "Create successfully!",
+                            message: "Thêm gói khám vào hệ thống thành công!",
                             data: result,
                           });
                         }
@@ -130,6 +130,9 @@ const getDetailPackages = (id) => {
         })
         .populate({
           path: "booking",
+        })
+        .populate({
+          path: "reviews",
         })
         .exec((error, result) => {
           if (error) {

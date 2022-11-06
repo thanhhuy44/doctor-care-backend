@@ -12,7 +12,7 @@ const createPost = (data, banner) => {
           if (error) {
             resolve({
               errCode: 1,
-              message: "Error",
+              message: "Lỗi",
             });
           } else {
             let id = mongoose.Types.ObjectId();
@@ -29,7 +29,7 @@ const createPost = (data, banner) => {
                 if (result) {
                   resolve({
                     errCode: 0,
-                    message: "Create Post successfully!",
+                    message: "Thêm bài viết vào hệ thống thành công!",
                     data: result,
                   });
                 } else {
@@ -56,13 +56,13 @@ const getAllPosts = () => {
         if (result) {
           resolve({
             errCode: 0,
-            message: "Successfully!",
+            message: "Thành công!",
             data: result,
           });
         } else {
           resolve({
             errCode: 1,
-            message: "Error!",
+            message: "Lỗi!",
           });
         }
       });
@@ -201,13 +201,13 @@ const deletePost = (id) => {
             if (result) {
               resolve({
                 errCode: 0,
-                message: "Delete post successfully!",
+                message: "Xóa bài viết khỏi hệ thống thành công!",
                 data: result,
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Post not found!",
+                message: "Không tìm thấy bài viết trên hệ thống!",
               });
             }
           }
