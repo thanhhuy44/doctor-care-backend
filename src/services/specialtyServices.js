@@ -14,7 +14,7 @@ const createSpecialty = (data, image) => {
           if (error) {
             resolve({
               errCode: 1,
-              message: "Lỗi",
+              message: error.message,
             });
           } else {
             let id = mongoose.Types.ObjectId();
