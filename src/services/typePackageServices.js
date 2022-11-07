@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import path from "path";
-import HealthPackage from "../models/healthPackage.js";
 import TypePackage from "../models/typePackage.js";
+import fs from "fs";
 
 const createTypePackage = (data, image) => {
   return new Promise(async (resolve, reject) => {
@@ -212,9 +212,22 @@ const deleteTypePackage = (id) => {
             });
           } else {
             if (result) {
-              resolve({
-                errCode: 0,
-                message: "Xóa loại gói khám thành công!",
+              const path = result.image.replace(
+                process.env.BASE_URL,
+                "./src/assets"
+              );
+              fs.unlink(path, (error) => {
+                if (error) {
+                  resolve({
+                    errCode: 1,
+                    message: error.message,
+                  });
+                } else {
+                  resolve({
+                    errCode: 0,
+                    message: "Xóa loại gói khám thành công!",
+                  });
+                }
               });
             } else {
               resolve({

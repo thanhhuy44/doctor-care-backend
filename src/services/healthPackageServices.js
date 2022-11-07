@@ -3,6 +3,7 @@ import path from "path";
 import HealthPackage from "../models/healthPackage.js";
 import Hospital from "../models/hospital.js";
 import TypePackage from "../models/typePackage.js";
+import fs from "fs";
 
 const createPackage = (data, image) => {
   return new Promise(async (resolve, reject) => {
@@ -258,14 +259,27 @@ const deletePackage = (id) => {
             });
           } else {
             if (result) {
-              resolve({
-                errCode: 0,
-                message: "Delete package successful!",
+              const path = result.image.replace(
+                process.env.BASE_URL,
+                "./src/assets"
+              );
+              fs.unlink(path, (error) => {
+                if (error) {
+                  resolve({
+                    errCode: 1,
+                    message: error.message,
+                  });
+                } else {
+                  resolve({
+                    errCode: 0,
+                    message: "Xóa gói khám khỏi hệ thống thành công!",
+                  });
+                }
               });
             } else {
               resolve({
                 errCode: 1,
-                message: "Package not found!",
+                message: "Không tìm thấy gói khám trên hệ thống!",
               });
             }
           }

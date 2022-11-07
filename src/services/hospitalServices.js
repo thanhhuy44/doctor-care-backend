@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import path from "path";
 import Hospital from "../models/hospital.js";
+import fs from "fs";
 
 const createHospital = (data, logo, image) => {
   return new Promise(async (resolve, reject) => {
@@ -360,9 +361,35 @@ const deleteHospital = (id) => {
             });
           } else {
             if (result) {
-              resolve({
-                errCode: 0,
-                message: "Xóa cơ sở y tế thành công!",
+              const pathImage = result.image.replace(
+                process.env.BASE_URL,
+                "./src/assets"
+              );
+              const pathLogo = result.logo.replace(
+                process.env.BASE_URL,
+                "./src/assets"
+              );
+              fs.unlink(pathImage, (error) => {
+                if (error) {
+                  resolve({
+                    errCode: 1,
+                    message: error.message,
+                  });
+                } else {
+                  fs.unlink(pathLogo, (error) => {
+                    if (error) {
+                      resolve({
+                        errCode: 1,
+                        message: error.message,
+                      });
+                    } else {
+                      resolve({
+                        errCode: 0,
+                        message: "Xóa cơ sở y tế thành công!",
+                      });
+                    }
+                  });
+                }
               });
             } else {
               resolve({

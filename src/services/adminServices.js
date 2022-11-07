@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import path from "path";
 import bcrypt from "bcrypt";
 import Admin from "../models/admin.js";
+import fs from "fs";
 
 const createAdmin = (data, image) => {
   return new Promise(async (resolve, reject) => {
@@ -320,9 +321,22 @@ const deleteAdmin = (id) => {
             });
           } else {
             if (result) {
-              resolve({
-                errCode: 0,
-                message: "Thành công!",
+              const path = result.image.replace(
+                process.env.BASE_URL,
+                "./src/assets"
+              );
+              fs.unlink(path, (error) => {
+                if (error) {
+                  resolve({
+                    errCode: 1,
+                    message: error.message,
+                  });
+                } else {
+                  resolve({
+                    errCode: 0,
+                    message: "Xóa quản trị viên khỏi hệ thống thành công!",
+                  });
+                }
               });
             } else {
               resolve({

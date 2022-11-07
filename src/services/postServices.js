@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import path from "path";
 import Post from "../models/post.js";
+import fs from "fs";
 
 const createPost = (data, banner) => {
   return new Promise(async (resolve, reject) => {
@@ -199,10 +200,23 @@ const deletePost = (id) => {
             });
           } else {
             if (result) {
-              resolve({
-                errCode: 0,
-                message: "Xóa bài viết khỏi hệ thống thành công!",
-                data: result,
+              const path = result.banner.replace(
+                process.env.BASE_URL,
+                "./src/assets"
+              );
+              fs.unlink(path, (error) => {
+                if (error) {
+                  resolve({
+                    errCode: 1,
+                    message: error.message,
+                  });
+                } else {
+                  resolve({
+                    errCode: 0,
+                    message: "Xóa bài viết khỏi hệ thống thành công!",
+                    data: result,
+                  });
+                }
               });
             } else {
               resolve({
