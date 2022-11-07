@@ -9,7 +9,7 @@ const createSpecialty = (data, image) => {
       let aliasName = data.name.split(" ").join("-");
       let fileName = image.name.split(" ").join("-");
       await image.mv(
-        path.resolve("/src/assets/images/specialties", fileName),
+        path.resolve(__dirname, "/src/assets/images/specialties", fileName),
         function (error) {
           if (error) {
             resolve({
