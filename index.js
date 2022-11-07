@@ -12,6 +12,7 @@ import connectDB from "./src/config/connectDb.js";
 connectDB();
 
 const app = express();
+app.use(cors());
 configViewEngine(app);
 dotenv.config();
 
@@ -21,7 +22,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.raw());
 app.use(fileUpload());
-app.use(cors());
 
 app.listen(3030, () => {
   console.log("App listening on port 3030");
