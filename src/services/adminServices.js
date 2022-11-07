@@ -261,7 +261,7 @@ const updateAdmin = (id, image, data) => {
       } else {
         let fileName = image.name.split(" ").join("-");
         await image.mv(
-          path.resolve("./src/assets/images", fileName),
+          path.resolve("./src/assets/images/admin", fileName),
           (error) => {
             if (error) {
               resolve({
@@ -275,7 +275,7 @@ const updateAdmin = (id, image, data) => {
                 },
                 {
                   ...data,
-                  image: `${process.env.BASE_URL}/images/${fileName}`,
+                  image: `${process.env.BASE_URL}/images/admin/${fileName}`,
                 },
                 (error, admin) => {
                   if (error) {
