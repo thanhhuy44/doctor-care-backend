@@ -286,35 +286,6 @@ const findDoctorWithFilter = (filter) => {
   });
 };
 
-const updateInfoDoctor = (id, data) => {
-  return new Promise((resolve, reject) => {
-    try {
-      Doctor.findByIdAndUpdate(
-        {
-          _id: mongoose.Types.ObjectId(id),
-        },
-        data,
-        (error, result) => {
-          if (result) {
-            resolve({
-              errCode: 0,
-              message: "Cập nhật bác sĩ thành công!",
-              data: result,
-            });
-          } else {
-            resolve({
-              errCode: 1,
-              message: error.message,
-            });
-          }
-        }
-      );
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
 const updateDoctor = (id, image, info) => {
   return new Promise((resolve, reject) => {
     try {
@@ -535,7 +506,6 @@ export {
   createDoctor,
   getDetailDoctor,
   getAllDoctors,
-  updateInfoDoctor,
   updateDoctor,
   deleteDoctor,
   searchDoctor,

@@ -1,5 +1,3 @@
-import User from "../models/user.js";
-import { create, getAll, update } from "../services/CRUDServices.js";
 import {
   changePassword,
   userLogin,

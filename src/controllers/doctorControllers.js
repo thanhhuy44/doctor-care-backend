@@ -53,11 +53,6 @@ const handleUpdateDoctor = async (req, res) => {
   }
 };
 
-const handleUpdateImageDoctor = async (req, res) => {
-  let result = await updateImageDoctor(req.params.id, req.files.image);
-  return res.json(result);
-};
-
 const handleDeleteDoctor = async (req, res) => {
   let result = await deleteDoctor(req.params.id);
   return res.json(result);
@@ -83,7 +78,6 @@ export {
   handleGetDoctorById,
   handleUpdateDoctor,
   handleDeleteDoctor,
-  handleUpdateImageDoctor,
   handleSearchDoctor,
   handleDoctorLogin,
   handleChangePasswordDoctor,
