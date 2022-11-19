@@ -115,7 +115,7 @@ const webRoutes = (app) => {
 
   router.post("/api/doctor/delete/:id", handleDeleteDoctor); //Xóa 1 bác sĩ
 
-  router.post("/api/doctor/login", handleDoctorLogin);
+  router.post("/api/doctor/login", handleDoctorLogin); //Bác sĩ đăng nhập
 
   router.post("/api/doctor/change-password/:id", handleChangePasswordDoctor);
 

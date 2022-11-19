@@ -6,14 +6,6 @@ const HospitalSchema = new Schema(
   {
     _id: { type: mongoose.Types.ObjectId, required: true },
     name: { type: String, required: true },
-    // email: { type: String, required: true },
-    // phoneNumber: { type: String, required: true },
-    // password: {
-    //   type: String,
-    //   required: true,
-    //   default: "12345678x@X",
-    //   select: false,
-    // },
     alias: { type: String, required: true },
     link: { type: String, required: true },
     description: { type: String, required: true },
